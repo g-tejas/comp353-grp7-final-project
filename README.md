@@ -29,3 +29,4 @@ HTML:
 - User Interface: Creates the structure and layout of web pages.
 - Content Display: Displays user-generated content, such as posts, comments, and files.
 - Form Handling: Processes user input from forms and sends it to the PHP server for processing.
+
