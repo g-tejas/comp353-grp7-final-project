@@ -1,0 +1,236 @@
+Comp353/2 -F Fall 2024
+Bipin C. DESAI
+Group Project
+Community Online Social Network -- COSN
+Demos Dates: Early Dec. 2024 = to be posted in CrsMgr
+Being concerned with the new form of colonialism/imperialism and ravage of the environment
+by farms of data centers controlled by a limited number of foreign 1 corporations your group has
+decided to create an open source system that can be used by local communities based on not for
+profit organizations. Your objective is to design a relational database system for a “realistic”
+Private Online Community Social Network System (COSN) sketched out below. This is
+followed by an implementation, deployment and demo of a working system followed by making
+required update of the system. It is expected that it would involve appropriate use of: CSS,
+HTML, Javascript, MariaDB-MySQL, and PHP.
+The application is a two-tier system, which support Firefox or any popular web browser at the
+client side and secure http server with PHP parser and a MySQL database at the server side. The
+system is expected to support all “representative” queries and operations required by a realistic
+COSN system. Each team member will be responsible for the entire project with each teammate
+being primarily responsible for an equitable and clearly defined portion of the project, to be
+agreed on by the team members. You will be provided a 25 minutes time slot to demonstrate that
+your system performs as expected in early Dec. 2024. A schedule for the demos will be posted
+on CrsMgr (first come first reserve). The project report as well as tar-gzipped (or zipped) file
+with the entire system including scripts to install and initialize a virgin system and details of all
+updates and bug fixes made since the demo must be uploaded to CrsMgr soon after the demo
+time.
+Project Description
+Use MySQL Database Management System to develop the Private Online Community Social
+Network System - COSN. One of the objectiveis to first flesh out the requirement of the system
+bearing in mind the minimum as sketched below. The application would include a collection of
+tables and services hosted by COSN. Hence COSN would enable members to access a local
+community based server to share information and ideas. It provides services for people sharing
+interests, activities, and backgrounds among themselves. The COSN system allow its members
+to create a profile, to create a list of other members with whom to share contents, and to view
+and add comments and contents - if enabled by the owner member of the web page. It also
+allows members to interact among each other via self-contained messaging system. The
+objective is the sharing of news, pictures, posts, activities, events, interests with members in the
+community. Also, it allows members to create groups that share common interests or affiliations
+and hold discussions in forums.
+1Mainly Usain!
+
+Requirements Specification
+You are required to develop a database system that will store at least the information about the
+following entities and relationships:
+Details
+
+on members: ID, password, other personal information such as address, internal
+interaction pseudonym etc. Members have family, friends and colleagues, privilege and status.
+A member can specify what part of his/her personal information is public and what part is
+accessible to which members of his/her group or is private.
+A new person in the community can become a member by entering his details and validate it by
+entering the required details such as the name and appropriate ID of an existing member or by
+being introduced to the system by an existing member. Only public information is visible to
+other non-members. Privilege can be either administrator, senior or junior. A member with an
+administrator privilege has the full power on all services such as creation, deletion, editing of all
+members and groups. The administrator could also post public items (accessible to the world). A
+member can post new items and specify which of his groups can access the post and who in
+each group can comment on it or add content to the post. An item could also be accessible to any
+other members.
+A member with a senior privilege can create groups and manipulate groups created by him/her.
+The group is owned by the member who created it. Also, a member with a senior privilege can
+add new members to the COSN. A member can add a list of members and specify them as family
+members, friend members or colleague members. Status of a member can be either active,
+inactive or suspended. An active member can have access to all the functionalities of a member.
+An inactive member will not be visible to other members. A suspended member will not be able
+to login to the COSN system until his/her status is changed.
+All new members start by default as junior members. Only a member with an administrator
+privilege can change the privilege of another member. The system by default has one member
+with username admin and password admin created initially(Both of these must be changed after
+the first login). Only members with administrator privileges can change the status of other
+members to suspended or reset it to active or inactive. A member with junior privilege can edit
+his/her profile, create a posting and communicate with other members. Also a junior member can
+post to groups that he/she is a member of only. A junior member can request to become a senior
+member. Each member can only have one profile including one email address.
+When installed on a operational system with functioning email server, the system could send out
+messages to indicate new contents to the members of the associated group. However, since there
+is a restriction of sending emails by AITS (No email messages are allowed to be sent out of the
+system), emails have to be simulated by a pop-up window and internal and sent email boxes.
+
+Guidelines
+Flesh out these guideline for you implementation.
+Details
+
+about groups: Records of information on each group, owner of the group, list of
+members belonging to the group. Owner of the group can add new members or remove members
+from the group. Members of a group can share a forum of information such as photos, videos and
+posts. Adding any member to a group requires the knowledge of the persons email address 2, first
+name and DOB. For a business member, the DOB is the date of incorporation of the business.
+Each
+
+member has a home page which has an index of his/her contents as well as the contents
+of each of the groups where he is an owner or member. The owner has a feature to view and
+manage the permissions to any content; the permissions can be changed only by the owner.
+Detail
+
+on contents and the permissions: Each content added by a member can have a profile
+which indicates who can do what with it. Content can be classified as view only, view and
+comment or view and add or link to other contents.
+- Non-person entities3, local businesses, local organization etc. could become members as long as
+they behave in a civil manner. The person members could always organize a plebiscite of person
+members to oust an non-person member and delete its contents.
+-The administrators include the contents moderators. Each new contents would be reviewed by
+a moderator before it could be posted. Any uncivil contents is black-listed (not posted) and the
+member posting it is warned about the non-conformity of the posted contents. A ‘real person.’
+member is suspended for a duration of time once the number of warnings exceeds 3. A business
+person is fined after the second warning. If the number of suspensions or fines exceeds 3, the
+member is suspended for at least a year.
+- The membership is free for a ‘real-person’ whereas for a business member there is a fee based
+on the number of postings made by it.
+These are the minimum requirements for your system. It is expected to discuss this application
+among yourselves, with the tutors and lab instructors as well as talk to people knowledgeable in
+the domain to enrich the application and make it more realistic4.
+
+2 CONS will allow only Proton email addresses!
+3The legislation in many jurisdictions has recognized a business corporation as a ‘person’ with all the rights but not
+the responsibility of one. Hence the businesses have been able to get away with acts for which an ordinary
+person is sent to jail! It is gratifying that the EU and some countries have started to take action to hold the CEO
+responsible for the act of such non-person organizations.
+4 Front Porch is an example of community on-line network that could, it is hoped, wipe out the existing
+behemoths.
+
+Implementation Details: Functions and Reports
+Design and implement the user interface using HTML and PHP for the required operations
+described above. Details on how to use PHP and HTML with MySQL will be provided by the
+lab instructors. Populate your tables with enough data to show the functionality of your system.
+The system should support at least the following functionalities through its interface:
+1. Create/Delete/Edit/Display a member.
+2. Create/Delete/Edit/Display a group.
+3. Create/Delete/Edit/Display list of friends for a member.
+4. Member request to be a friend of other member or join a group.
+5. Member's ability to block another member or to be withdrawn from a group.
+6. Member's ability to post texts, images or videos as well as to view posts by other members
+and comment on them.
+7. Members can either post or view posts of only groups that they belong to.
+8. Member's main page shows the best and latest posts from their groups and friends.
+9. Members can send a private message to their friends.
+10. Report of groups or members by specific category such as interest, age, profession, region,
+etc.
+11. Ability to organize an event for the group by voting on date/time/place from a set posted and/
+or alternates suggested by one of the group members
+12. Registry and/or Gift exchange ideas among a family (secret Santa) or a group.
+Note: The system would be run by an administrator on a private server (could be on a cloud).
+There must be no facility to download any contents except through screen capture. Each team is
+to implement the COSN system. The team must have a designated leader (DBA) who
+coordinates the work. It is expected that the team is to meet regularly during lab hours and each
+meeting is logged with the names of group members participating. In addition to the
+implementation, the team is required to prepare a machine printed preliminary report
+documenting their project which must include the E-R model, the DB design and its
+normalization. This preliminary report is due before the demo. The implementation of the system
+including the database system must be demonstrated by each team at a pre-designated time.
+Remember that the database is the foundation of your system and if it is not sound, it will bring
+the whole structure down. Just like the building foundation, the database is not visible; what is
+visible is the structure above ground (in this case, the interface and its functionality). It must be
+attractive, non-intrusive, non-intimidating and functional (a.k.a user friendly).
+1. Develop an E/R diagram for the entity sets and relationships described above. Determine the
+attributes and the multiplicity of the relationships. The design should be as compact as possible
+without sacrificing the required objectives. Make sure you state clearly any reasonable
+assumption made in your design, which is not specified in the requirements specified above.
+
+2. Convert your E/R diagram into a relational database schema. Make necessary refinements to
+the schema, if possible. Identify various integrity constraints such as primary keys, foreign keys,
+functional dependencies, and referential constraints. Make sure that your database schema is at
+least in 3NF.
+Final Report & submissions
+Your report should include: project description, the assumptions, the design decisions made and
+give rational explanations for all assumptions, the limitations, the applications supported, E-R
+diagrams and relational database design; responsibility of each member of the team and the joint
+responsibility; the interface design rational, the script to create the database (clearing any old
+tables and data that may be hanging around) and populate the tables. Include also the contents of
+the tables, the queries, and their responses. In addition, the source code of any procedures,
+triggers, programs, the dump of the database, etc., must also be submitted. Include the screen
+shots of the interfaces for various members and a log of the entire session. Also, submit the online log of work done (who, when, what, why) mentioned above.
+All programs/code/scripts must have adequate internal and external documentation. The project
+submission would also include all codes etc. in a single directory with appropriate subdirectories. This directory could be compressed to a single file with its size limited to 15 Mbytes
+which means you need to upload a tar-gzipped ball (or rar, zip, etc.). This tar-gzipped ball must
+also include a report in LaTex or word processor form your project report documenting your
+project and must include details on
+➢
+The design of the DB using an E/R data model.
+➢
+Its conversion into a relational model satisfying at least 3NF.
+➢
+The user-interface for each supported role, application and reports.
+➢
+A sample session for each application (user guide).
+➢
+An installation guide.
+➢
+All codes and scripts.(list only the directory structures and the names of all modules- not
+the actual code: the code must be uploaded in the tarball to CrsMgr)
+➢
+List of team members’ contribution as its last part. The title of this section should be
+“Contributions”, indicating who did what in the project. It is wise to be realistic since the lab
+instructors will also evaluate each team member’s contributions.
+Also include a "README" text file detailing the team (group) ID, the names, student IDs and
+ENCS accounts of each member of the team, the group account, PW, URL for the project and list
+of files included in the submission. Also include: the user IDs and passwords of all users for
+testing the system and any other information required to install, run and test the system during
+the final grading by the course professor on his own server.
+For the demo, your system must be installed and running on a designated ENCS server.
+If you have made changes, enhancements, fixed bugs, etc. since your demo then highlight these
+in the README file and make sure it is also reflected in your final report. A working version of
+
+the project should be presented by the group to the lab instructors during the presentation. Every
+member of the group MUST be present during their demo.:
+Note 1: The document report should be included in the upload. The source of the code you
+demonstrate at demo time should be uploaded with your report at demo time as part of your
+project report.
+Note 2: Your project report must include official names of the team members, student ID's
+clearly appearing on the cover. Inappropriate submissions will be penalized.
+
+Bibliography:
+- https://frontporchforum.com/about-us
+Aurelien Breeden, Adam Satariano “Telegram Founder Charged With Wide Range of Crimes in
+France”, https://www.nytimes.com/2024/08/28/business/telegram-ceo-pavel-durov-charged.html
+-Nikolas Bowie. “Corporate Personhood v. Corporate Statehood”, https://harvardlawreview.org/
+print/vol-132/corporate-personhood-v-corporate-statehood/
+Luis Chinchilla Fuentes,”Corporations as Citizenship, the next step in corporate personhood”
+https://www.mcgill.ca/humanrights/article/corporations-citizenship-next-step-corporatepersonhood
+-Andrew Liptak, “How a Vermont social network became a model for online communities:”,
+https://www.theverge.com/2019/1/24/18129437/front-porch-forum-vermont-social-networklistserv-local-online-community
+-Josh Kramer, “The Vermont miracle: How one local platform is rewriting the rules of social
+media” , https://newpublic.substack.com/p/the-vermont-miracle-how-one-local
+=Benjy Radcliffe, “The Corporation as a Person: Legal Fact or Fiction?”,
+https://www.thecourt.ca/the-corporation-as-a-person-legal-fact-or-fiction/
+=Ty Roush, “Secret Service Investigating Elon Musk’s X Post About Assassination Threats
+Against Biden And Harris, Report Says”, https://www.forbes.com/sites/tylerroush/2024/09/19/
+secret-service-investigating-elon-musks-x- post-about-assassination-threats-against-biden-andharris-report-says/
+Nina Totenberg, “When Did Companies Become People? Excavating The Legal Evolution”,
+https://www.npr.org/2014/07/28/335288388/when-did-companies-become-people-excavatingthe-legal-evolution
+
+Adam Winkler, “We the Corporations: How American Businesses Won Their Civil Rights:,
+WW. Norton & Co, ISBN: 978-6-87140-384-1
+Adam Winkler, ‘Corporations Are People’ Is Built on an Incredible 19th-Century Lie.
+https://www.theatlantic.com/business/archive/2018/03/corporations-people-adam-winkler/
+554852/
+
+
