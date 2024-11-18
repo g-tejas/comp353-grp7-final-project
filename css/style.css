@@ -1,0 +1,131 @@
+/* Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  padding: 20px;
+}
+
+/* Navigation */
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 15px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+button {
+  padding: 8px 16px;
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* Content Cards */
+.card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+/* Dashboard Styles */
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.welcome-card {
+  text-align: center;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.auth-links {
+  margin-top: 20px;
+}
+
+.auth-links .button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 0 10px;
+  background: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.action-item {
+  display: block;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.3s;
+}
+
+.action-item:hover {
+  background: #e9ecef;
+}
+
+.action-title {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.action-desc {
+  display: block;
+  font-size: 0.9em;
+  color: #666;
+}
+
+/* Dev Environment Styles */
+.dev-options {
+  margin: 15px 0;
+  padding: 10px;
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-radius: 4px;
+}
+
+.dev-options label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.dev-options input[type="checkbox"] {
+  width: auto;
+}

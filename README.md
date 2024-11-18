@@ -1,4 +1,6 @@
-# Group 7
+# COMP353
+
+## Group 7
 
 | Name | Student ID | Email |
 |------|------------|--------|
@@ -30,3 +32,8 @@ HTML:
 - Content Display: Displays user-generated content, such as posts, comments, and files.
 - Form Handling: Processes user input from forms and sends it to the PHP server for processing.
 
+
+## Technologies used:
+- PHP
+- HTML
+- MySQL Database
