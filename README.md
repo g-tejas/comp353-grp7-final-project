@@ -14,7 +14,8 @@
 LINK TO DATABASE DIAGRAM:
 https://liveconcordia-my.sharepoint.com/:u:/r/personal/a_mosnie_live_concordia_ca/Documents/ER%20Digram%20COMP353.vsdx?d=we16ba84417cd4e828e2ce06c4bdee7f0&csf=1&web=1&e=fUZh0q
 
-
+LINK TO DATABASE SCHEMA (TABLES AND ATTRIBUTES):
+https://docs.google.com/document/d/1sVznHG634ye395hFJMW3sg32vMHFekyLOGuRRLCKAwg/edit?usp=sharing
 
 PHP:
 - Server-side scripting: PHP processes user requests, interacts with the database, and generates dynamic HTML content.
