@@ -14,3 +14,8 @@
     <button type="submit">Login</button>
 </form>
 
+<!--Register button -->
+<form action="register.php" method="GET">
+    <button type="submit">Register</button>
+</form>
+
