@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'includes\dbh.inc.php'; // Ensure this path is correct!!! it can vary based on your files
+include 'includes/dbh.inc.php'; // Ensure this path is correct
 
 // Check if the user is logged in
 if (!isset($_SESSION['user'])) {
@@ -21,11 +21,12 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $pseudonym = $row['Pseudonym'];
     $email = $row['Email'];
+    $date_joined = isset($row['Date_Joined']) ? $row['Date_Joined'] : 'N/A';
     $status = $row['Status'];
     $privilege_level = $row['Privilege_Level'];
     $address = $row['Address'];
     $is_business = $row['Is_Business'];
-    $dob = $row['Date_of_Birth'];
+    $dob = isset($row['Date_of_Birth']) ? $row['Date_of_Birth'] : 'N/A';
 } else {
     echo "User not found.";
     exit();
@@ -57,6 +58,7 @@ $conn->close();
         <p>Email: <?php echo htmlspecialchars($email); ?></p>
         <p>Address: <?php echo htmlspecialchars($address); ?></p>
         <p>Date of Birth: <?php echo htmlspecialchars($dob); ?></p>
+        <p>Member Since: <?php echo htmlspecialchars($date_joined); ?></p>
         <p>Status: <?php echo htmlspecialchars($status); ?></p>
         <p>Privilege Level: <?php echo htmlspecialchars($privilege_level); ?></p>
         <p>Is Business: <?php echo htmlspecialchars($is_business); ?></p>
