@@ -68,13 +68,8 @@ $conn->close();
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="profile-container">
-        <h2>Friend Info</h2>
-        <button onclick="location.href='friends.php'">Back to Friends</button>
-    </div>
-
     <div class="profile-info card">
-        <h3>Personal Information</h3>
+        <h3>Friend Information</h3>
         <p>Pseudonym: <?php echo htmlspecialchars($pseudonym); ?></p>
         <p>Email: <?php echo htmlspecialchars($email); ?></p>
         <p>Address: <?php echo htmlspecialchars($address); ?></p>
