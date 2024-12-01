@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'includes/header.php';
-include 'includes/dbh.inc.php'; 
+include 'includes/dbh.inc.php'; // Ensure this path is correct
 
 // Check if the user is logged in
 if (!isset($_SESSION['user'])) {
@@ -44,7 +44,7 @@ $conn->close();
 </head>
 <body>
     <div class="friends-container">
-        <form action="send_friend_request.php" method="POST" class="friend-request-form">
+        <form action="processes/send_friend_request.php" method="POST" class="friend-request-form">
             <input type="text" name="username" placeholder="ENTER USERNAME" required>
             <button type="submit" class="button">Send friend request</button>
         </form>

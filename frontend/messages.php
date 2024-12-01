@@ -45,7 +45,7 @@ $conn->close();
 </head>
 <body>
     <div class="profile-container">
-    <button onclick="location.href='createmessage.php'">New Message</button>
+        <button onclick="location.href='createmessage.php'">New Message</button>
     </div>
     <div class="messages-container">
         <?php if (!empty($messages)): ?>
@@ -56,6 +56,12 @@ $conn->close();
                         <span class="message-timestamp">@<?php echo htmlspecialchars($message['Timestamp']); ?></span>
                         <h3 class="message-title"><?php echo htmlspecialchars($message['Title']); ?></h3>
                         <p class="message-body"><?php echo htmlspecialchars($message['Body']); ?></p>
+                        <?php if (strpos($message['Title'], 'has sent you a friend request') !== false): ?>
+                            <form action="processes/accept_friend_request.php" method="POST">
+                                <input type="hidden" name="sender_id" value="<?php echo htmlspecialchars($message['Sender_ID']); ?>">
+                                <button type="submit" class="btn btn-primary">Accept Friend Request</button>
+                            </form>
+                        <?php endif; ?>
                     </li>
                 <?php endforeach; ?>
             </ul>
