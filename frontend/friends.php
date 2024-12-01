@@ -51,7 +51,7 @@ $conn->close();
                     <li class="friend-item">
                         <span class="friend-username"><?php echo htmlspecialchars($friend['Pseudonym']); ?></span>
                         <span class="friend-relationship"><?php echo htmlspecialchars($friend['Relationship_Type']); ?></span>
-                        <a href="friend_info.php?friend_id=<?php echo $friend['Friend_ID']; ?>" class="button">View Info</a>
+                        <a href="friend_info.php?friend_id=<?php echo $friend['Member_2_ID']; ?>" class="button">View Info</a>
                     </li>
                 <?php endforeach; ?>
             </ul>
