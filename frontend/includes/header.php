@@ -20,6 +20,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     <li><a href="index.php">Home</a></li>
                     <li><a href="profile.php">Profile</a></li>
                     <li><a href="groups.php">Groups</a></li>
+                    <li><a href="friends.php">Friends</a></li>
                     <li><a href="messages.php">Messages</a></li>
                     <li><a href="logout.php">Logout</a></li>
                 </ul>

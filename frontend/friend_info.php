@@ -1,6 +1,7 @@
 <?php
 session_start();
-include 'includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/header.php';
+include 'includes/dbh.inc.php'; 
 
 // Check if the user is logged in
 if (!isset($_SESSION['user'])) {
@@ -8,12 +9,18 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$member_id = $_SESSION['user'];
+// Get the friend_id from the query parameter
+if (!isset($_GET['friend_id'])) {
+    echo "No friend specified.";
+    exit();
+}
 
-// Fetch user data from the database
+$friend_id = $_GET['friend_id'];
+
+// Fetch friend data from the database
 $query = "SELECT * FROM member WHERE Member_ID = ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $member_id);
+$stmt->bind_param("i", $friend_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -28,7 +35,7 @@ if ($result->num_rows > 0) {
     $is_business = $row['Is_Business'];
     $dob = isset($row['Date_of_Birth']) ? $row['Date_of_Birth'] : 'N/A';
 
-    // Set privilege label from value stored in the database
+    // Determine the privilege level label
     switch ($privilege_level) {
         case 3:
             $privilege_label = "Admin";
@@ -44,7 +51,7 @@ if ($result->num_rows > 0) {
             break;
     }
 } else {
-    echo "User not found.";
+    echo "Friend not found.";
     exit();
 }
 
@@ -52,24 +59,17 @@ $stmt->close();
 $conn->close();
 ?>
 
-<?php include 'includes/header.php'; ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>Friend Info</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="profile-container">
-        <h2>Profile</h2>
-        <button onclick="location.href='edit_profile.php'">Edit Profile</button>
-    </div>
-
     <div class="profile-info card">
-        <h3>Personal Information</h3>
+        <h3>Friend Information</h3>
         <p>Pseudonym: <?php echo htmlspecialchars($pseudonym); ?></p>
         <p>Email: <?php echo htmlspecialchars($email); ?></p>
         <p>Address: <?php echo htmlspecialchars($address); ?></p>
@@ -80,7 +80,7 @@ $conn->close();
     </div>
 
     <div class="profile-groups card">
-        <h3>My Groups</h3>
+        <h3>Groups</h3>
         <!-- TODO: Replace with actual group data -->
         <ul>
             <li>Local Community Group</li>

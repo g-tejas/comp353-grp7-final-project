@@ -102,13 +102,13 @@ CREATE TABLE IF NOT EXISTS `member_relationship` (
 
 CREATE TABLE IF NOT EXISTS `private_messages` (
   `Sender_ID` int(11) NOT NULL,
-  `Reciever_ID` int(11) NOT NULL,
+  `Receiver_ID` int(11) NOT NULL,
   `Title` varchar(50) NOT NULL,
   `Body` text DEFAULT NULL,
   `Timestamp` datetime NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`Sender_ID`,`Reciever_ID`),
-  KEY `Reciever_ID` (`Reciever_ID`),
-  CONSTRAINT `Reciever_ID` FOREIGN KEY (`Reciever_ID`) REFERENCES `member` (`Member_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  PRIMARY KEY (`Sender_ID`,`Receiver_ID`,`Timestamp`),
+  KEY `Reciever_ID` (`Receiver_ID`),
+  CONSTRAINT `Receiver_ID` FOREIGN KEY (`Receiver_ID`) REFERENCES `member` (`Member_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `Sender_ID` FOREIGN KEY (`Sender_ID`) REFERENCES `member` (`Member_ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ;
 
