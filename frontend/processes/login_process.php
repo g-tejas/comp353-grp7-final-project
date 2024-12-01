@@ -18,6 +18,7 @@ if ($result->num_rows > 0) {
     if ($password === $row['Password']) {
         // Set session variables
         $_SESSION['user'] = $row['Member_ID'];
+        $_SESSION['username'] = $row['Pseudonym'];
         $_SESSION['email'] = $row['Email'];
         // Redirect to the profile page
         header("Location: ../profile.php");
