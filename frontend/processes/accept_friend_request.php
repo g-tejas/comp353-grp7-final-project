@@ -45,8 +45,8 @@ $stmt->bind_param("iiii", $receiver_id, $sender_id, $sender_id, $receiver_id);
 
 if ($stmt->execute()) {
     // Send a confirmation message
-    $title = "You are now friends with " . htmlspecialchars($sender_pseudonym);
-    $body = "You are now friends with " . htmlspecialchars($sender_pseudonym) . ".";
+    $title = "You are now friends!";
+    $body = "";
     $query = "INSERT INTO private_messages (Sender_ID, Receiver_ID, Title, Body) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("iiss", $receiver_id, $sender_id, $title, $body);
