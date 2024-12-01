@@ -1,4 +1,3 @@
-<?php include 'includes/header.php'; ?>
 
 <div class="form-container">
     <h2>Register New Account</h2>

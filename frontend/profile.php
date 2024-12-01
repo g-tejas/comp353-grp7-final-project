@@ -1,19 +1,67 @@
+<?php
+session_start();
+include 'includes/dbh.inc.php'; // Ensure this path is correct
+
+// Check if the user is logged in
+if (!isset($_SESSION['user'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$member_id = $_SESSION['user'];
+
+// Fetch user data from the database
+$query = "SELECT * FROM member WHERE Member_ID = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $member_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $pseudonym = $row['Pseudonym'];
+    $email = $row['Email'];
+    $date_joined = isset($row['Date_Joined']) ? $row['Date_Joined'] : 'N/A';
+    $status = $row['Status'];
+    $privilege_level = $row['Privilege_Level'];
+    $address = $row['Address'];
+    $is_business = $row['Is_Business'];
+    $dob = isset($row['Date_of_Birth']) ? $row['Date_of_Birth'] : 'N/A';
+} else {
+    echo "User not found.";
+    exit();
+}
+
+$stmt->close();
+$conn->close();
+?>
+
 <?php include 'includes/header.php'; ?>
 
-<div class="profile-container">
-    <div class="profile-header">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="profile-container">
         <h2>Profile</h2>
         <button onclick="location.href='edit_profile.php'">Edit Profile</button>
     </div>
 
     <div class="profile-info card">
         <h3>Personal Information</h3>
-        <!-- TODO: Replace with actual user data -->
-        <p>Name: John Doe</p>
-        <p>Email: john.doe@proton.me</p>
-        <p>Member Since: January 1, 2024</p>
-        <p>Status: Active</p>
-        <p>Privilege Level: Junior Member</p>
+        <p>Pseudonym: <?php echo htmlspecialchars($pseudonym); ?></p>
+        <p>Email: <?php echo htmlspecialchars($email); ?></p>
+        <p>Address: <?php echo htmlspecialchars($address); ?></p>
+        <p>Date of Birth: <?php echo htmlspecialchars($dob); ?></p>
+        <p>Member Since: <?php echo htmlspecialchars($date_joined); ?></p>
+        <p>Status: <?php echo htmlspecialchars($status); ?></p>
+        <p>Privilege Level: <?php echo htmlspecialchars($privilege_level); ?></p>
+        <p>Is Business: <?php echo htmlspecialchars($is_business); ?></p>
     </div>
 
     <div class="profile-groups card">
@@ -34,6 +82,5 @@
             <small>Posted: 2024-03-20</small>
         </div>
     </div>
-</div>
-
-<?php include 'includes/footer.php'; ?>
+</body>
+</html>
