@@ -21,9 +21,6 @@ if (session_status() === PHP_SESSION_NONE) {
                     <li><a href="profile.php">Profile</a></li>
                     <li><a href="groups.php">Groups</a></li>
                     <li><a href="messages.php">Messages</a></li>
-                    <?php if($_SESSION['user_role'] === 'admin'): ?>
-                        <li><a href="admin.php">Admin Panel</a></li>
-                    <?php endif; ?>
                     <li><a href="logout.php">Logout</a></li>
                 </ul>
             </nav>
