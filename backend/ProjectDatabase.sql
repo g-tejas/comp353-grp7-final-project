@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `private_messages` (
   `Title` varchar(50) NOT NULL,
   `Body` text DEFAULT NULL,
   `Timestamp` datetime NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`Sender_ID`,`Reciever_ID`),
+  PRIMARY KEY (`Sender_ID`,`Reciever_ID`,`Timestamp`),
   KEY `Reciever_ID` (`Reciever_ID`),
   CONSTRAINT `Reciever_ID` FOREIGN KEY (`Reciever_ID`) REFERENCES `member` (`Member_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `Sender_ID` FOREIGN KEY (`Sender_ID`) REFERENCES `member` (`Member_ID`) ON DELETE CASCADE ON UPDATE CASCADE
