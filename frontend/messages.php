@@ -50,8 +50,8 @@ $conn->close();
             <ul class="messages-list">
                 <?php foreach ($messages as $message): ?>
                     <li class="message-item">
-                        <span class="message-sender"><?php echo htmlspecialchars($message['Sender_Pseudonym']); ?></span>
-                        <span class="message-timestamp"><?php echo htmlspecialchars($message['Timestamp']); ?></span>
+                        <span class="message-sender">FROM: <?php echo htmlspecialchars($message['Sender_Pseudonym']); ?></span>
+                        <span class="message-timestamp">@<?php echo htmlspecialchars($message['Timestamp']); ?></span>
                         <h3 class="message-title"><?php echo htmlspecialchars($message['Title']); ?></h3>
                         <p class="message-body"><?php echo htmlspecialchars($message['Body']); ?></p>
                     </li>
