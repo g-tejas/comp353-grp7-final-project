@@ -44,6 +44,10 @@ $conn->close();
 </head>
 <body>
     <div class="friends-container">
+        <form action="send_friend_request.php" method="POST" class="friend-request-form">
+            <input type="text" name="username" placeholder="ENTER USERNAME" required>
+            <button type="submit" class="button">Send friend request</button>
+        </form>
         <h2>My Friends</h2>
         <?php if (!empty($friends)): ?>
             <ul class="friends-list">
