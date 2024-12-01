@@ -41,11 +41,22 @@ if (!isset($_SESSION['pseudonym']) || !isset($_SESSION['address']) || !isset($_S
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
     <link rel="stylesheet" href="css/style.css">
+    <script>
+        function validateForm() {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm_password").value;
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
     <div class="container">
         <h2>Edit Profile</h2>
-        <form action="processes\update_profile.php" method="POST">
+        <form action="processes/update_profile.php" method="POST" onsubmit="return validateForm()">
             <div class="form-group">
                 <label for="pseudonym">Pseudonym</label>
                 <textarea class="form-control" id="pseudonym" name="pseudonym" rows="1"><?php echo htmlspecialchars($_SESSION['pseudonym']); ?></textarea>
@@ -61,6 +72,14 @@ if (!isset($_SESSION['pseudonym']) || !isset($_SESSION['address']) || !isset($_S
             <div class="form-group">
                 <label for="dob">Date of Birth</label>
                 <input type="date" class="form-control" id="dob" name="dob" value="<?php echo date('Y-m-d', strtotime($_SESSION['dob'])); ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="password">New Password</label>
+                <input type="password" class="form-control" id="password" name="password">
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password">
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Save Changes</button>

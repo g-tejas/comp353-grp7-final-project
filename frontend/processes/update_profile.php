@@ -15,11 +15,21 @@ $pseudonym = $_POST['pseudonym'];
 $email = $_POST['email'];
 $address = $_POST['address'];
 $dob = $_POST['dob'];
+$password = $_POST['password'];
+$confirm_password = $_POST['confirm_password'];
 
-// Update the member information in the database
-$query = "UPDATE member SET Pseudonym = ?, Email = ?, Address = ?, Date_of_Birth = ? WHERE Member_ID = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("ssssi", $pseudonym, $email, $address, $dob, $member_id);
+// Check if passwords match
+if (!empty($password) && $password === $confirm_password) {
+    // Update the member information in the database with the new password
+    $query = "UPDATE member SET Pseudonym = ?, Email = ?, Address = ?, Date_of_Birth = ?, Password = ? WHERE Member_ID = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("sssssi", $pseudonym, $email, $address, $dob, $password, $member_id);
+} else {
+    // Update the member information without changing the password
+    $query = "UPDATE member SET Pseudonym = ?, Email = ?, Address = ?, Date_of_Birth = ? WHERE Member_ID = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("ssssi", $pseudonym, $email, $address, $dob, $member_id);
+}
 
 if ($stmt->execute()) {
     // Update session variables
