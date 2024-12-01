@@ -13,7 +13,7 @@ $member_id = $_SESSION['user'];
 
 // Fetch messages for the logged-in user from the database
 $query = "
-    SELECT pm.Message_ID, pm.Sender_ID, pm.Receiver_ID, pm.Content, pm.Timestamp, s.Pseudonym AS Sender_Pseudonym
+    SELECT pm.Sender_ID, pm.Receiver_ID, pm.Title, pm.Body, pm.Timestamp, s.Pseudonym AS Sender_Pseudonym
     FROM private_messages pm
     JOIN member s ON pm.Sender_ID = s.Member_ID
     WHERE pm.Receiver_ID = ?
@@ -52,7 +52,8 @@ $conn->close();
                     <li class="message-item">
                         <span class="message-sender"><?php echo htmlspecialchars($message['Sender_Pseudonym']); ?></span>
                         <span class="message-timestamp"><?php echo htmlspecialchars($message['Timestamp']); ?></span>
-                        <p class="message-content"><?php echo htmlspecialchars($message['Content']); ?></p>
+                        <h3 class="message-title"><?php echo htmlspecialchars($message['Title']); ?></h3>
+                        <p class="message-body"><?php echo htmlspecialchars($message['Body']); ?></p>
                     </li>
                 <?php endforeach; ?>
             </ul>
