@@ -1,48 +1,66 @@
+<?php
+session_start();
+include 'includes/header.php';
+include 'includes/dbh.inc.php'; // Ensure this path is correct
+
+// Check if the user is logged in
+if (!isset($_SESSION['user'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Fetch user data from the database if not already set in session
+if (!isset($_SESSION['pseudonym']) || !isset($_SESSION['address']) || !isset($_SESSION['dob']) || !isset($_SESSION['email'])) {
+    $member_id = $_SESSION['user'];
+    $query = "SELECT * FROM member WHERE Member_ID = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $member_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $_SESSION['pseudonym'] = $row['Pseudonym'];
+        $_SESSION['address'] = $row['Address'];
+        $_SESSION['dob'] = $row['Date_of_Birth'];
+        $_SESSION['email'] = $row['Email'];
+    } else {
+        echo "User not found.";
+        exit();
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile - COSN</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Edit Profile</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container my-5">
-        <h1>Edit Profile</h1>
-        <form id="edit-profile-form" action="update_profile.php" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" name="name" maxlength="100" value="<?php echo htmlspecialchars($user['Name']); ?>" required>
-            </div>
+    <div class="container">
+        <h2>Edit Profile</h2>
+        <form action="processes\update_profile.php" method="POST">
             <div class="form-group">
                 <label for="pseudonym">Pseudonym</label>
-                <input type="text" class="form-control" id="pseudonym" name="pseudonym" maxlength="50" value="<?php echo htmlspecialchars($user['Pseudonym']); ?>" required>
+                <textarea class="form-control" id="pseudonym" name="pseudonym" rows="1"><?php echo htmlspecialchars($_SESSION['pseudonym']); ?></textarea>
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($user['Email']); ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" name="password">
-                <small class="form-text text-muted">Leave blank to keep the current password.</small>
+                <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($_SESSION['email']); ?>" required>
             </div>
             <div class="form-group">
                 <label for="address">Address</label>
-                <textarea class="form-control" id="address" name="address" rows="3"><?php echo htmlspecialchars($user['Address']); ?></textarea>
+                <textarea class="form-control" id="address" name="address" rows="3"><?php echo htmlspecialchars($_SESSION['address']); ?></textarea>
             </div>
             <div class="form-group">
                 <label for="dob">Date of Birth</label>
-                <input type="date" class="form-control" id="dob" name="dob" value="<?php echo date('Y-m-d', strtotime($user['Date_of_Birth'])); ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="profile-picture">Profile Picture</label>
-                <input type="file" class="form-control-file" id="profile-picture" name="profile_picture">
-                <small class="form-text text-muted">Supported formats: JPG, PNG, GIF. Maximum size: 2MB.</small>
-            </div>
-            <div class="form-group">
-                <img id="profile-preview" src="<?php echo $user['Profile_Picture'] ? $user['Profile_Picture'] : 'img/default-avatar.png'; ?>" alt="Profile Picture" class="img-thumbnail" style="max-width: 200px;">
+                <input type="date" class="form-control" id="dob" name="dob" value="<?php echo date('Y-m-d', strtotime($_SESSION['dob'])); ?>" required>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -50,21 +68,5 @@
             </div>
         </form>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#profile-picture').on('change', function() {
-                var file = this.files[0];
-                if (file) {
-                    var reader = new FileReader();
-                    reader.onload = function(e) {
-                        $('#profile-preview').attr('src', e.target.result);
-                    }
-                    reader.readAsDataURL(file);
-                }
-            });
-        });
-    </script>
 </body>
 </html>

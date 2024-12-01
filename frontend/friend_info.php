@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'includes/header.php';
-include 'includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php'; 
 
 // Check if the user is logged in
 if (!isset($_SESSION['user'])) {
