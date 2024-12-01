@@ -44,8 +44,10 @@ $conn->close();
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <div class="profile-container">
+    <button onclick="location.href='createmessage.php'">New Message</button>
+    </div>
     <div class="messages-container">
-        <h2>My Messages</h2>
         <?php if (!empty($messages)): ?>
             <ul class="messages-list">
                 <?php foreach ($messages as $message): ?>
