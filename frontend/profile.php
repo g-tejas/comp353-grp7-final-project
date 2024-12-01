@@ -27,6 +27,22 @@ if ($result->num_rows > 0) {
     $address = $row['Address'];
     $is_business = $row['Is_Business'];
     $dob = isset($row['Date_of_Birth']) ? $row['Date_of_Birth'] : 'N/A';
+
+    // Set privilege label from value stored in the database
+    switch ($privilege_level) {
+        case 3:
+            $privilege_label = "Admin";
+            break;
+        case 1:
+            $privilege_label = "Junior";
+            break;
+        case 2:
+            $privilege_label = "Senior";
+            break;
+        default:
+            $privilege_label = "Unknown";
+            break;
+    }
 } else {
     echo "User not found.";
     exit();
@@ -58,9 +74,8 @@ $conn->close();
         <p>Email: <?php echo htmlspecialchars($email); ?></p>
         <p>Address: <?php echo htmlspecialchars($address); ?></p>
         <p>Date of Birth: <?php echo htmlspecialchars($dob); ?></p>
-        <p>Member Since: <?php echo htmlspecialchars($date_joined); ?></p>
         <p>Status: <?php echo htmlspecialchars($status); ?></p>
-        <p>Privilege Level: <?php echo htmlspecialchars($privilege_level); ?></p>
+        <p>Privilege Level: <?php echo htmlspecialchars($privilege_label); ?></p>
         <p>Is Business: <?php echo htmlspecialchars($is_business); ?></p>
     </div>
 
