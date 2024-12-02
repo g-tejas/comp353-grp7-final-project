@@ -106,7 +106,14 @@ $result = $stmt->get_result();
                         <div class="post-item">
                             <p><?php echo htmlspecialchars($row['Body']); ?></p>
                             <?php if ($row['Media_Path']): ?>
-                                <img src="<?php echo htmlspecialchars(str_replace('../', '', $row['Media_Path'])); ?>" alt="Post Media" style="max-width: 100%; height: auto;">
+                                <?php if (strpos($row['Media_Path'], '.mp4') !== false || strpos($row['Media_Path'], '.webm') !== false): ?>
+                                    <video controls style="max-width: 100%; height: auto;">
+                                        <source src="<?php echo htmlspecialchars(str_replace('../', '', $row['Media_Path'])); ?>" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                <?php else: ?>
+                                    <img src="<?php echo htmlspecialchars(str_replace('../', '', $row['Media_Path'])); ?>" alt="Post Media" style="max-width: 100%; height: auto;">
+                                <?php endif; ?>
                             <?php endif; ?>
                             <button class="btn btn-danger" onclick="deletePost(<?php echo $row['Content_ID']; ?>)">Delete</button>
                         </div>
