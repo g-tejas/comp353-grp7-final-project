@@ -22,10 +22,11 @@ CREATE TABLE IF NOT EXISTS `group` (
 
 CREATE TABLE IF NOT EXISTS `content` (
   `Content_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Group_ID` int(11) NOT NULL,
+  `Group_ID` int(11) DEFAULT NULL,
   `Member_ID` int(11) NOT NULL,
   `Body` text DEFAULT NULL,
   `Title` varchar(50) NOT NULL,
+  `Media_Path` varchar(255) DEFAULT NULL,
   `Timestamp` datetime NOT NULL DEFAULT current_timestamp(),
   `Is_Event` bit(1) NOT NULL DEFAULT b'0',
   `Event_Date_and_time` datetime DEFAULT NULL,
