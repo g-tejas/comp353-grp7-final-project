@@ -64,9 +64,22 @@ $stmt->execute();
 $result = $stmt->get_result();
 $relationship_type= $result->fetch_assoc()['Type'];
 
+
+//Fetch the friends accessibility (Blocked,Public,Private)
+$member_id = $_SESSION['user'];
+$query = "SELECT Accessibility FROM profile_accessibility WHERE Member_ID = ? AND Target_ID = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("ii",$member_id, $friend_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$privacy= $result->fetch_assoc()['Accessibility'];
+
 $stmt->close();
 $conn->close();
+
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -83,6 +96,7 @@ $conn->close();
         <p>Email: <?php echo htmlspecialchars($email); ?></p>
         <p>Address: <?php echo htmlspecialchars($address); ?></p>
         <p>Type of Relationship: <?php echo htmlspecialchars($relationship_type); ?></p>
+        <p>Privacy for my profile: <?php echo htmlspecialchars($privacy); ?></p>
         <p>Date of Birth: <?php echo htmlspecialchars($dob); ?></p>
         <p>Status: <?php echo htmlspecialchars($status); ?></p>
         <p>Privilege Level: <?php echo htmlspecialchars($privilege_label); ?></p>
@@ -102,6 +116,22 @@ $conn->close();
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Change Relationship Type</button>
+        </form>
+    </div>
+
+    <div class="privacy-change card">
+        <h3>Set Privacy for this User</h3>
+        <form action="processes/set_privacy.php" method="POST">
+            <input type="hidden" name="friend_id" value="<?php echo htmlspecialchars($friend_id); ?>">
+            <div class="form-group">
+                <label for="privacy">Select Level of Privacy</label>
+                <select class="form-control" id="privacy" name="privacy" required>
+                    <option value="Public" <?php echo $relationship_type == 'Public' ? 'selected' : ''; ?>>Public</option>
+                    <option value="Private" <?php echo $relationship_type == 'Private' ? 'selected' : ''; ?>>Private</option>
+                    <option value="Blocked" <?php echo $relationship_type == 'Blocked' ? 'selected' : ''; ?>>Blocked</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Set Privacy</button>
         </form>
     </div>
 
