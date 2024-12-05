@@ -4,7 +4,6 @@ include 'includes/dbh.inc.php';
 include 'includes/header.php';
 
 // Fetch posts for the logged-in user
-$user_id = $_SESSION['user'];
 $query = "SELECT * FROM content WHERE Member_ID = ? ORDER BY Timestamp DESC";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $user_id);

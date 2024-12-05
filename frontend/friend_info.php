@@ -89,6 +89,22 @@ $conn->close();
         <p>Is Business: <?php echo htmlspecialchars($is_business); ?></p>
     </div>
 
+    <div class="relationship-change card">
+        <h3>Change Relationship Type</h3>
+        <form action="processes/change_relationship_type.php" method="POST">
+            <input type="hidden" name="friend_id" value="<?php echo htmlspecialchars($friend_id); ?>">
+            <div class="form-group">
+                <label for="relationship_type">Select Relationship Type</label>
+                <select class="form-control" id="relationship_type" name="relationship_type" required>
+                    <option value="Friend" <?php echo $relationship_type == 'Friend' ? 'selected' : ''; ?>>Friend</option>
+                    <option value="Colleague" <?php echo $relationship_type == 'Colleague' ? 'selected' : ''; ?>>Colleague</option>
+                    <option value="Family" <?php echo $relationship_type == 'Family' ? 'selected' : ''; ?>>Family</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Change Relationship Type</button>
+        </form>
+    </div>
+
     <div class="profile-groups card">
         <h3>Groups</h3>
         <!-- TODO: Replace with actual group data -->
