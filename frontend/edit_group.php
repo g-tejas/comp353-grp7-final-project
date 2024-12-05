@@ -44,8 +44,107 @@ try {
     }
     $stmt->close();
 
+    // Check if the user has the required privilege level to remove members
+    $stmt = $conn->prepare("SELECT Privilege_Level FROM member WHERE Member_ID = ?");
+    $stmt->bind_param('i', $member_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $privilege_level = $row['Privilege_Level'];
+    } else {
+        // Handle the case when the user is not found in the database
+        echo "Error: User not found.";
+        exit();
+    }
+
+    $stmt->close();
+
     // Handle form submission for editing the group
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_members'])) {
+        $emails = isset($_POST['emails']) ? array_map('trim', explode(',', $_POST['emails'])) : [];
+        $pseudonyms = isset($_POST['pseudonyms']) ? array_map('trim', explode(',', $_POST['pseudonyms'])) : [];
+        $dates_of_birth = isset($_POST['dates_of_birth']) ? array_map('trim', explode(',', $_POST['dates_of_birth'])) : [];
+    
+        if (empty($emails) || empty($pseudonyms) || empty($dates_of_birth)) {
+            $error_message = "Please provide email addresses, pseudonyms, and dates of birth for all members you want to add.";
+        } else {
+            $member_count = count($emails);
+            if (count($pseudonyms) !== $member_count || count($dates_of_birth) !== $member_count) {
+                $error_message = "The number of email addresses, pseudonyms, and dates of birth must match.";
+            } else {
+                try {
+                    $conn->autocommit(FALSE);
+    
+                    for ($i = 0; $i < $member_count; $i++) {
+                        $email = $emails[$i];
+                        $pseudonym = $pseudonyms[$i];
+                        $date_of_birth = $dates_of_birth[$i];
+    
+                        // Check if the member already exists
+                        $stmt = $conn->prepare("SELECT Member_ID FROM member WHERE Email = ?");
+                        $stmt->bind_param('s', $email);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+    
+                        if ($result->num_rows > 0) {
+                            $member_id = $result->fetch_assoc()['Member_ID'];
+                        } else {
+                            // Insert a new member
+                            $stmt = $conn->prepare("INSERT INTO member (Email, Pseudonym, Date_of_Birth) VALUES (?, ?, ?)");
+                            $stmt->bind_param('sss', $email, $pseudonym, $date_of_birth);
+                            $stmt->execute();
+                            $member_id = $conn->insert_id;
+                        }
+    
+                        // Add the member to the group
+                        $stmt = $conn->prepare("INSERT INTO group_members (Member_ID, Group_ID, Is_Owner) VALUES (?, ?, 0)");
+                        $stmt->bind_param('ii', $member_id, $group_id);
+                        $stmt->execute();
+                    }
+    
+                    $conn->commit();
+                    $success_message = "Members added successfully.";
+                } catch (Exception $e) {
+                    $conn->rollback();
+                    $error_message = "Error adding members: " . $e->getMessage();
+                } finally {
+                    $conn->autocommit(TRUE);
+                }
+            }
+        }
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_members'])) {
+        $member_ids = isset($_POST['member_ids']) ? array_map('intval', explode(',', $_POST['member_ids'])) : [];
+    
+        if (empty($member_ids)) {
+            $error_message = "Please provide the Member IDs of the members you want to remove.";
+        } else {
+            try {
+                $conn->autocommit(FALSE);
+    
+                foreach ($member_ids as $member_id) {
+                    // Remove the member from the group
+                    $stmt = $conn->prepare("DELETE FROM group_members WHERE Member_ID = ? AND Group_ID = ?");
+                    $stmt->bind_param('ii', $member_id, $group_id);
+                    $stmt->execute();
+                }
+    
+                $conn->commit();
+                $success_message = "Members removed successfully.";
+            } catch (Exception $e) {
+                $conn->rollback();
+                $error_message = "Error removing members: " . $e->getMessage();
+            } finally {
+                $conn->autocommit(TRUE);
+            }
+        }
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['add_members']) && !isset($_POST['remove_members'])) {
         $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
 
@@ -81,22 +180,56 @@ try {
 <body>
     <div class="container my-5">
         <h1>Edit Group</h1>
-        <?php if (isset($group)): ?>
-            <form method="POST" action="edit_group.php?id=<?php echo $group_id; ?>">
-                <div class="form-group">
-                    <label for="name">Group Name</label>
-                    <input type="text" class="form-control" id="name" name="name" value="<?php echo htmlspecialchars($group['Name']); ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="description">Group Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="3" required><?php echo htmlspecialchars($group['Description']); ?></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Save Changes</button>
-                <a href="group_details.php?id=<?php echo $group_id; ?>" class="btn btn-secondary">Cancel</a>
-            </form>
-        <?php else: ?>
-            <p class="alert alert-danger">Group details not found.</p>
+        <?php if (isset($success_message)): ?>
+            <div class="alert alert-success"><?php echo $success_message; ?></div>
         <?php endif; ?>
+        <?php if (isset($error_message)): ?>
+            <div class="alert alert-danger"><?php echo $error_message; ?></div>
+        <?php endif; ?>
+        <?php if (isset($group)): ?>
+        <form method="POST" action="edit_group.php?id=<?php echo $group_id; ?>">
+            <div class="form-group">
+                <label for="name">Group Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="<?php echo htmlspecialchars($group['Name']); ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Group Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3" required><?php echo htmlspecialchars($group['Description']); ?></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="group_details.php?id=<?php echo $group_id; ?>" class="btn btn-secondary">Cancel</a>
+        </form>
+
+        <?php if ($privilege_level >= 2): ?>
+            <h2>Remove Members</h2>
+            <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . '?id=' . $group_id); ?>">
+                <div class="form-group">
+                    <label for="member_ids">Member IDs (comma-separated)</label>
+                    <input type="text" class="form-control" id="member_ids" name="member_ids" required>
+                </div>
+                <button type="submit" class="btn btn-danger" name="remove_members">Remove Members</button>
+            </form>
+        <?php endif; ?>
+
+        <h2>Add Members</h2>
+        <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . '?id=' . $group_id); ?>">
+            <div class="form-group">
+                <label for="emails">Email Addresses (comma-separated)</label>
+                <input type="text" class="form-control" id="emails" name="emails" required>
+            </div>
+            <div class="form-group">
+                <label for="pseudonyms">Pseudonyms (comma-separated)</label>
+                <input type="text" class="form-control" id="pseudonyms" name="pseudonyms" required>
+            </div>
+            <div class="form-group">
+                <label for="dates_of_birth">Dates of Birth (comma-separated, YYYY-MM-DD format)</label>
+                <input type="text" class="form-control" id="dates_of_birth" name="dates_of_birth" required>
+            </div>
+            <button type="submit" class="btn btn-primary" name="add_members">Add Members</button>
+        </form>
+<?php else: ?>
+    <p class="alert alert-danger">Group details not found.</p>
+<?php endif; ?>
     </div>
 
     <?php include 'includes/footer.php'; ?>
