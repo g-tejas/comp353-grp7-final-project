@@ -11,6 +11,13 @@ if (!isset($_SESSION['user'])) {
 $sender_id = $_SESSION['user'];
 $username = $_POST['username'];
 
+// Fetch the sender's pseudonym
+$query = "SELECT Pseudonym FROM member WHERE Member_ID = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $sender_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
 // Fetch the friend's Member_ID based on the username
 $query = "SELECT Member_ID FROM member WHERE Pseudonym = ?";
 $stmt = $conn->prepare($query);
@@ -18,12 +25,14 @@ $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
 
+
+
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $receiver_id = $row['Member_ID'];
 
     // Insert the friend request message into the private_messages table
-    $title = "$username has sent you a friend request.";
+    $title = "$sender_id has sent you a friend request.";
     $body = "To accept this request, please click the button below.";
     $query = "INSERT INTO private_messages (Sender_ID, Receiver_ID, Title, Body) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
