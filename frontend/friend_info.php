@@ -55,6 +55,15 @@ if ($result->num_rows > 0) {
     exit();
 }
 
+//Fetch the friends status (Colleague, Friend, Family)
+$member_id = $_SESSION['user'];
+$query = "SELECT Type FROM member_relationship WHERE Member_1_ID = ? AND Member_2_ID = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("ii",$member_id, $friend_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$relationship_type= $result->fetch_assoc()['Type'];
+
 $stmt->close();
 $conn->close();
 ?>
@@ -73,6 +82,7 @@ $conn->close();
         <p>Pseudonym: <?php echo htmlspecialchars($pseudonym); ?></p>
         <p>Email: <?php echo htmlspecialchars($email); ?></p>
         <p>Address: <?php echo htmlspecialchars($address); ?></p>
+        <p>Type of Relationship: <?php echo htmlspecialchars($relationship_type); ?></p>
         <p>Date of Birth: <?php echo htmlspecialchars($dob); ?></p>
         <p>Status: <?php echo htmlspecialchars($status); ?></p>
         <p>Privilege Level: <?php echo htmlspecialchars($privilege_label); ?></p>
