@@ -11,6 +11,29 @@ if (!isset($_SESSION['user'])) {
 
 $member_id = $_SESSION['user'];
 
+// Check if the user has the required privilege level
+$stmt = $conn->prepare("SELECT Privilege_Level FROM member WHERE Member_ID = ?");
+$stmt->bind_param('i', $member_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $privilege_level = $row['Privilege_Level'];
+
+    if ($privilege_level < 2) {
+        // Redirect users with junior privileges
+        header("Location: groups.php");
+        exit();
+    }
+} else {
+    // Handle the case when the user is not found in the database
+    echo "Error: User not found.";
+    exit();
+}
+
+$stmt->close();
+
 // Validate form submission
 $errors = [];
 
