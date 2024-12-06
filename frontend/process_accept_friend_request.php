@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 include 'includes/dbh.inc.php'; // Ensure this path is correct
 
 // Check if the user is logged in
@@ -10,6 +11,7 @@ if (!isset($_SESSION['user'])) {
 
 $receiver_id = $_SESSION['user'];
 $sender_id = $_POST['sender_id']; 
+
 
 // Retrieve the sender's pseudonym
 $query = "SELECT Pseudonym FROM member WHERE Member_ID = ?";

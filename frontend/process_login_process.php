@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 include 'includes/dbh.inc.php'; // Include your database connection file
 
 $username = $_POST['username'];
