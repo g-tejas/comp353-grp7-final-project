@@ -5,11 +5,11 @@ if (session_status() === PHP_SESSION_NONE) {
 
 include 'includes/dbh.inc.php'; 
 
-// Check if the user is logged in
+// user is logged in?
 if (isset($_SESSION['user'])) {
     $member_id = $_SESSION['user'];
 
-    // Fetch the user's privilege level
+    // Fetch privilege level
     $query = "SELECT Privilege_Level FROM member WHERE Member_ID = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $member_id);
@@ -41,7 +41,7 @@ if (isset($_SESSION['user'])) {
                     <li><a href="friends.php">Friends</a></li>
                     <li><a href="messages.php">Messages</a></li>
                     <li><a href="logout.php">Logout</a></li>
-                    <?php if ($privilege_level == 3): // Check if the user is an admin ?>
+                    <?php if ($privilege_level == 3): // check if admin ?>
                         <li><a href="admin_groups.php">Manage Groups</a></li>
                         <li><a href="admin_users.php">Manage Users</a></li>
                     <?php endif; ?>

@@ -1,16 +1,16 @@
 <?php
 session_start();
-include 'includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php';
 
-// Check if the user is logged in
+// user logged in?
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../login.php");
+    header("Location: login.php");
     exit();
 }
 
 $member_id = $_SESSION['user_id'];
 
-// Fetch user data from the database
+// Fetch user data
 $query = "SELECT * FROM member WHERE Member_ID = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $member_id);

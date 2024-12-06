@@ -1,9 +1,9 @@
 <?php
 session_start();
 include 'includes/header.php';
-include 'includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php'; 
 
-// Check if the user is logged in
+// user is logged in?
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();
@@ -11,7 +11,7 @@ if (!isset($_SESSION['user'])) {
 
 $member_id = $_SESSION['user'];
 
-// Validate group ID
+// check group ID
 $group_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!$group_id) {
     header("Location: groups.php");
@@ -19,7 +19,7 @@ if (!$group_id) {
 }
 
 try {
-    // Fetch the group details from the database
+    // fetch the group details
     $stmt_group = $conn->prepare("SELECT g.Name, g.Description, m.Pseudonym AS Owner_Name
                            FROM `group` g
                            JOIN group_members gm ON g.Group_ID = gm.Group_ID
@@ -47,7 +47,7 @@ try {
     $result_members = $stmt_members->get_result();
     $members = $result_members->fetch_all(MYSQLI_ASSOC);
 
-    // Fetch the group content (posts, events, etc.)
+    // Fetch the group content
 $stmt_content = $conn->prepare("SELECT c.Content_ID, c.Title, c.Body, c.Timestamp, c.Is_Event, 
 c.Event_Date_and_time, c.Event_Location, m.Pseudonym AS Author,
 cc.View

@@ -1,13 +1,13 @@
 <?php
 session_start();
-include 'includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php'; 
 
 
 
 $member_id = $_POST['member_id'];
 $status = $_POST['status'];
 
-// Update the member's status in the database
+// Update member status in the database
 $query = "UPDATE member SET Status = ? WHERE Member_ID = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("si", $status, $member_id);

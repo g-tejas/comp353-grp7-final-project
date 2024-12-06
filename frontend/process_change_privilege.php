@@ -1,13 +1,13 @@
 <?php
 session_start();
-include 'includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php'; 
 
 
 
 $member_id = $_POST['member_id'];
 $privilege = $_POST['privilege'];
 
-// Update the member's privilege level in the database
+// Update privilege level
 $query = "UPDATE member SET Privilege_Level = ? WHERE Member_ID = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("ii", $privilege, $member_id);

@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-include 'includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php'; 
 
-// Check if the user is logged in
+// user logged in?
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();
@@ -13,7 +13,7 @@ $sender_id = $_SESSION['user'];
 $username = $_POST['username'];
 
 
-// Fetch the sender's pseudonym
+// fetch sender pseudonym
 $query = "SELECT Pseudonym FROM member WHERE Member_ID = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $sender_id);
@@ -29,7 +29,7 @@ if ($result->num_rows > 0) {
 }
 
 
-// Fetch the friend's Member_ID based on the username
+// fetch friends Member_ID based on the username
 $query = "SELECT Member_ID FROM member WHERE Pseudonym = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("s", $username);
@@ -41,7 +41,7 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $receiver_id = $row['Member_ID'];
 
-    // Insert the friend request message into the private_messages table
+    // Insert friend request message in private_messages table
     $title = "$sender_pseudonym has sent you a friend request.";
 
     $body = "To accept this request, please click the button below.";

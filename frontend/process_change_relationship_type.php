@@ -2,7 +2,7 @@
 session_start();
 include 'includes/dbh.inc.php';
 
-// Check if the user is logged in
+// user logged in?
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();

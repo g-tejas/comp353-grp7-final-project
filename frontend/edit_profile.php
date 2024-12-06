@@ -1,15 +1,15 @@
 <?php
 session_start();
 include 'includes/header.php';
-include 'includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php'; 
 
-// Check if the user is logged in
+// user is logged in?
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();
 }
 
-// Fetch user data from the database if not already set in session
+// get user data
 if (!isset($_SESSION['pseudonym']) || !isset($_SESSION['address']) || !isset($_SESSION['dob']) || !isset($_SESSION['email'])) {
     $member_id = $_SESSION['user'];
     $query = "SELECT * FROM member WHERE Member_ID = ?";

@@ -1,8 +1,8 @@
 <?php
 session_start();
-include 'includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php';
 
-// Check if the user is logged in
+// user logged in?
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();
@@ -13,7 +13,7 @@ $receiver_id = $_POST['friend'];
 $title = $_POST['title'];
 $body = $_POST['body'];
 
-// Check if the sender is blocked by the receiver
+// sender blocked by the receiver?
 $query = "SELECT Accessibility FROM profile_accessibility WHERE Member_ID = ? AND Target_ID = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("ii", $receiver_id, $sender_id);
@@ -29,7 +29,7 @@ if ($result->num_rows > 0) {
     }
 }
 
-// Insert the message into the private_messages table
+// Insert message in private_messages table
 $query = "INSERT INTO private_messages (Sender_ID, Receiver_ID, Title, Body) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("iiss", $sender_id, $receiver_id, $title, $body);

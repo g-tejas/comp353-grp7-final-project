@@ -1,9 +1,9 @@
 <?php
 session_start();
 include 'includes/header.php';
-include 'includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php'; 
 
-// Check if the user is logged in
+// user is logged in?
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();
@@ -11,7 +11,7 @@ if (!isset($_SESSION['user'])) {
 
 $member_id = $_SESSION['user'];
 
-// Check if the user has the required privilege level
+// Check user privilege level
 $stmt = $conn->prepare("SELECT Privilege_Level FROM member WHERE Member_ID = ?");
 $stmt->bind_param('i', $member_id);
 $stmt->execute();
@@ -22,12 +22,12 @@ if ($result->num_rows > 0) {
     $privilege_level = $row['Privilege_Level'];
 
     if ($privilege_level < 2) {
-        // Redirect users with junior privileges
+        // redirect users with junior privileges
         header("Location: groups.php");
         exit();
     }
 } else {
-    // Handle the case when the user is not found in the database
+    // the user is not found in the database
     echo "Error: User not found.";
     exit();
 }

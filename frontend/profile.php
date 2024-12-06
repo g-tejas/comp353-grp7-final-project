@@ -1,8 +1,8 @@
 <?php
 session_start();
-include 'includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php'; 
 
-// Check if the user is logged in
+// user logged in?
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();
@@ -10,7 +10,7 @@ if (!isset($_SESSION['user'])) {
 
 $member_id = $_SESSION['user'];
 
-// Fetch user data from the database
+// get user data
 $query = "SELECT * FROM member WHERE Member_ID = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $member_id);
@@ -28,7 +28,7 @@ if ($result->num_rows > 0) {
     $is_business = $row['Is_Business'];
     $dob = isset($row['Date_of_Birth']) ? $row['Date_of_Birth'] : 'N/A';
 
-    // Set privilege label from value stored in the database
+    // Set privilege label (from int to the word)
     switch ($privilege_level) {
         case 3:
             $privilege_label = "Admin";

@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-include 'includes/dbh.inc.php'; // Include your database connection file
+include 'includes/dbh.inc.php'; 
 
 $username = $_POST['username'];
 $password = $_POST['password'];
 
-// Prepare and execute the SQL statement to check the credentials
+//check credentials
 $query = "SELECT * FROM member WHERE Pseudonym = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("s", $username);
@@ -20,13 +20,11 @@ if ($result->num_rows > 0) {
         header("Location: login.php");
         exit();
     }
-    // Directly compare the plain text password
+    //compare password
     if ($password === $row['Password']) {
-        // Set session variables
         $_SESSION['user'] = $row['Member_ID'];
         $_SESSION['username'] = $row['Pseudonym'];
         $_SESSION['email'] = $row['Email'];
-        // Redirect to the profile page
         header("Location: profile.php");
         exit();
     } else {
@@ -36,7 +34,6 @@ if ($result->num_rows > 0) {
         exit();
     }
 } else {
-    // No user found with that username
     $_SESSION['error'] = "Invalid username or password.";
     header("Location: login.php");
     exit();

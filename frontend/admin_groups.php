@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'includes/header.php';
-include 'includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php';
 
 
 // Fetch all groups from the database
