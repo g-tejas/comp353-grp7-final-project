@@ -56,6 +56,10 @@ $conn->close();
                         <span class="friend-username"><?php echo htmlspecialchars($friend['Pseudonym']); ?></span>
                         <span class="friend-relationship"><?php echo htmlspecialchars($friend['Relationship_Type']); ?></span>
                         <a href="friend_info.php?friend_id=<?php echo $friend['Member_2_ID']; ?>" class="button">View Info</a>
+                        <form action="process_unfriend.php" method="POST" class="unfriend-form">
+                            <input type="hidden" name="friend_id" value="<?php echo htmlspecialchars($friend['Member_2_ID']); ?>">
+                            <button type="submit" class="button">Unfriend</button>
+                        </form>
                     </li>
                 <?php endforeach; ?>
             </ul>
