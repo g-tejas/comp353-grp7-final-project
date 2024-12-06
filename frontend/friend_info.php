@@ -74,12 +74,17 @@ $stmt->execute();
 $result = $stmt->get_result();
 $privacy= $result->fetch_assoc()['Accessibility'];
 
+// Fetch user accessibility to friend's profile (Blocked, Public, Private)
+$query = "SELECT Accessibility FROM profile_accessibility WHERE Member_ID = ? AND Target_ID = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("ii", $friend_id, $member_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$privacy_on_user = $result->fetch_assoc()['Accessibility'];
+
 $stmt->close();
 $conn->close();
-
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -92,15 +97,27 @@ $conn->close();
 <body>
     <div class="profile-info card">
         <h3>Friend Information</h3>
-        <p>Pseudonym: <?php echo htmlspecialchars($pseudonym); ?></p>
-        <p>Email: <?php echo htmlspecialchars($email); ?></p>
-        <p>Address: <?php echo htmlspecialchars($address); ?></p>
-        <p>Type of Relationship: <?php echo htmlspecialchars($relationship_type); ?></p>
-        <p>Privacy for my profile: <?php echo htmlspecialchars($privacy); ?></p>
-        <p>Date of Birth: <?php echo htmlspecialchars($dob); ?></p>
-        <p>Status: <?php echo htmlspecialchars($status); ?></p>
-        <p>Privilege Level: <?php echo htmlspecialchars($privilege_label); ?></p>
-        <p>Is Business: <?php echo htmlspecialchars($is_business); ?></p>
+        <?php if ($privacy_on_user == 'Blocked'): ?>
+            <p>You are blocked from viewing this profile.</p>
+            <p>Set Privacy: <?php echo htmlspecialchars($privacy); ?></p>
+        <?php elseif ($privacy_on_user == 'Private'): ?>
+            <p>Pseudonym: <?php echo htmlspecialchars($pseudonym); ?></p>
+            <p>Type of Relationship: <?php echo htmlspecialchars($relationship_type); ?></p>
+            <p>Set Privacy: <?php echo htmlspecialchars($privacy); ?></p>
+            <p>Privilege Level: <?php echo htmlspecialchars($privilege_label); ?></p>
+        <?php elseif ($privacy_on_user == 'Public'): ?>
+            <p>Pseudonym: <?php echo htmlspecialchars($pseudonym); ?></p>
+            <p>Email: <?php echo htmlspecialchars($email); ?></p>
+            <p>Address: <?php echo htmlspecialchars($address); ?></p>
+            <p>Type of Relationship: <?php echo htmlspecialchars($relationship_type); ?></p>
+            <p>Set Privacy: <?php echo htmlspecialchars($privacy); ?></p>
+            <p>Date of Birth: <?php echo htmlspecialchars($dob); ?></p>
+            <p>Status: <?php echo htmlspecialchars($status); ?></p>
+            <p>Privilege Level: <?php echo htmlspecialchars($privilege_label); ?></p>
+            <p>Is Business: <?php echo htmlspecialchars($is_business); ?></p>
+        <?php else: ?>
+            <p>Privacy setting not recognized.</p>
+        <?php endif; ?>
     </div>
 
     <div class="relationship-change card">
