@@ -14,7 +14,7 @@ $sender_id = $_POST['sender_id'];
 // Retrieve the sender's pseudonym
 $query = "SELECT Pseudonym FROM member WHERE Member_ID = ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $sender_id);
+$stmt->bind_param("i", $receiver_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -46,7 +46,6 @@ $stmt->bind_param("iiii", $receiver_id, $sender_id, $sender_id, $receiver_id);
 if ($stmt->execute()) {
     // Send a confirmation message
     $title = "You are now friends with " . htmlspecialchars($sender_pseudonym);
-    $body = "You are now friends with " . htmlspecialchars($sender_pseudonym) . ".";
     $query = "INSERT INTO private_messages (Sender_ID, Receiver_ID, Title, Body) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("iiss", $receiver_id, $sender_id, $title, $body);
