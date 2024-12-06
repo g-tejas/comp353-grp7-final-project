@@ -1,10 +1,10 @@
 <?php
 session_start();
-include '../includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php'; // Ensure this path is correct
 
 // Check if the user is logged in
 if (!isset($_SESSION['user'])) {
-    header("Location: ../login.php");
+    header("Location: login.php");
     exit();
 }
 
@@ -57,7 +57,7 @@ if ($stmt->execute()) {
         $stmt->bind_param("iiii", $receiver_id, $sender_id, $sender_id, $receiver_id);
 
         if ($stmt->execute()) {
-            header("Location: ../messages.php");
+            header("Location: messages.php");
             exit();
         } else {
             echo "Error setting the friends privacy: " . $stmt->error;

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../includes/dbh.inc.php'; // Include your database connection file
+include 'includes/dbh.inc.php'; // Include your database connection file
 
 $username = $_POST['username'];
 $password = $_POST['password'];
@@ -21,18 +21,18 @@ if ($result->num_rows > 0) {
         $_SESSION['username'] = $row['Pseudonym'];
         $_SESSION['email'] = $row['Email'];
         // Redirect to the profile page
-        header("Location: ../profile.php");
+        header("Location: profile.php");
         exit();
     } else {
         // Invalid password
         $_SESSION['error'] = "Invalid username or password.";
-        header("Location: ../login.php");
+        header("Location: login.php");
         exit();
     }
 } else {
     // No user found with that username
     $_SESSION['error'] = "Invalid username or password.";
-    header("Location: ../login.php");
+    header("Location: login.php");
     exit();
 }
 

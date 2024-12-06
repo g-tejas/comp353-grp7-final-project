@@ -1,10 +1,10 @@
 <?php
 session_start();
-include '../includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php'; // Ensure this path is correct
 
 // Check if the user is logged in
 if (!isset($_SESSION['user'])) {
-    header("Location: ../login.php");
+    header("Location: login.php");
     exit();
 }
 
@@ -48,7 +48,7 @@ if ($result->num_rows > 0) {
 
     if ($stmt->execute()) {
         echo "Friend request sent successfully.";
-        header("Location: ../friends.php");
+        header("Location: friends.php");
         exit();
     } else {
         echo "Error sending friend request: " . $conn->error;

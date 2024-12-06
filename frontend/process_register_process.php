@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../includes/dbh.inc.php'; // Database connection file
+include 'includes/dbh.inc.php'; // Database connection file
 
 // Get data from register page
 $email = $_POST['email'];
@@ -20,7 +20,7 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     // Email already exists, redirect back to register page with error message
     $_SESSION['error'] = "Email already exists";
-    header("Location: ../register.php");
+    header("Location: register.php");
     exit();
 }
 
@@ -34,7 +34,7 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     // Pseudonym already exists, redirect back to register page with error message
     $_SESSION['error'] = "Pseudonym already exists";
-    header("Location: ../register.php");
+    header("Location: register.php");
     exit();
 }
 
@@ -45,7 +45,7 @@ $stmt->bind_param("ssssss", $email, $address, $pseudonym, $is_business, $dob, $p
 
 if ($stmt->execute()) {
     // Registration successful, redirect to login page
-    header("Location: ../login.php"); // Update the path to the login page
+    header("Location: login.php"); // Update the path to the login page
     exit();
 } else {
     // Registration failed, display an error message

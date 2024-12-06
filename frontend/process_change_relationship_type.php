@@ -1,10 +1,10 @@
 <?php
 session_start();
-include '../includes/dbh.inc.php';
+include 'includes/dbh.inc.php';
 
 // Check if the user is logged in
 if (!isset($_SESSION['user'])) {
-    header("Location: ../login.php");
+    header("Location: login.php");
     exit();
 }
  $member_id = $_SESSION['user'];
@@ -18,7 +18,7 @@ $stmt->bind_param("siiii", $type, $member_id, $friend_id, $friend_id, $member_id
 
 if ($stmt->execute()) {
     echo "Relationship type updated successfully.";
-    header("Location: ../friend_info.php?friend_id=" . $friend_id);
+    header("Location: friend_info.php?friend_id=" . $friend_id);
     exit();
 } else {
     echo "Error updating relationship type: " . $conn->error;
