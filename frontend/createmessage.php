@@ -1,9 +1,9 @@
 <?php
 session_start();
 include 'includes/header.php';
-include 'includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php'; 
 
-// Check if the user is logged in
+// user is logged in?
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();
@@ -11,7 +11,7 @@ if (!isset($_SESSION['user'])) {
 
 $member_id = $_SESSION['user'];
 
-// Fetch friends list from the database
+// get friends list
 $query = "
     SELECT m.Member_ID, m.Pseudonym
     FROM member_relationship mr

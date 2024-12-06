@@ -1,9 +1,9 @@
 <?php
 session_start();
 include 'includes/header.php';
-include 'includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php'; 
 
-// Check if the user is logged in
+// user logged in?
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();
@@ -11,7 +11,7 @@ if (!isset($_SESSION['user'])) {
 
 $member_id = $_SESSION['user'];
 
-// Fetch messages for the logged-in user from the database
+// fetch messages
 $query = "
     SELECT pm.Sender_ID, pm.Receiver_ID, pm.Title, pm.Body, pm.Timestamp, s.Pseudonym AS Sender_Pseudonym
     FROM private_messages pm
@@ -64,7 +64,7 @@ $conn->close();
                         <?php endif; ?>
                         <?php
 if (strpos($message['Title'], 'has invited you to a group') !== false) {
-    // Extract the Group ID from the Body
+    // Extract Group ID from the Body
     $body = $message['Body'];
     $group_id = null;
 

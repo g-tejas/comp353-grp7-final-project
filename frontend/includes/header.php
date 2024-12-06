@@ -2,6 +2,24 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+include 'includes/dbh.inc.php'; 
+
+// user is logged in?
+if (isset($_SESSION['user'])) {
+    $member_id = $_SESSION['user'];
+
+    // Fetch privilege level
+    $query = "SELECT Privilege_Level FROM member WHERE Member_ID = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $member_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $privilege_level = $row['Privilege_Level'];
+    $stmt->close();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,6 +41,10 @@ if (session_status() === PHP_SESSION_NONE) {
                     <li><a href="friends.php">Friends</a></li>
                     <li><a href="messages.php">Messages</a></li>
                     <li><a href="logout.php">Logout</a></li>
+                    <?php if ($privilege_level == 3): // check if admin ?>
+                        <li><a href="admin_groups.php">Manage Groups</a></li>
+                        <li><a href="admin_users.php">Manage Users</a></li>
+                    <?php endif; ?>
                 </ul>
             </nav>
         <?php endif; ?>

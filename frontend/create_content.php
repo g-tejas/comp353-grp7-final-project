@@ -3,7 +3,7 @@ session_start();
 include 'includes/header.php';
 include 'includes/dbh.inc.php';
 
-// Check if the user is logged in
+// user is logged in?
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();
@@ -11,30 +11,29 @@ if (!isset($_SESSION['user'])) {
 
 $member_id = $_SESSION['user'];
 
-// Get the group ID from the query parameter
+// Get the group ID
 $group_id = filter_input(INPUT_GET, 'group_id', FILTER_SANITIZE_NUMBER_INT);
 
 // Validate form submission
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Sanitize and validate input
     $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
     $body = trim(filter_input(INPUT_POST, 'body', FILTER_SANITIZE_STRING));
 
-    // Validate title
+    // title
     if (empty($title)) {
         $errors[] = "Title is required.";
     } elseif (strlen($title) > 50) {
         $errors[] = "Title cannot exceed 50 characters.";
     }
 
-    // Validate body
+    // body
     if (empty($body)) {
         $errors[] = "Body is required.";
     }
 
-    // If no errors, proceed with content creation
+    // no errors - create content
     if (empty($errors)) {
         try {
             // Disable autocommit
@@ -48,10 +47,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("Failed to create content: " . $stmt->error);
             }
 
-            // Get the last inserted Content_ID
+            // Get last inserted Content_ID
             $content_id = $stmt->insert_id;
 
-            // Prepare and execute content_classification insertion
+            //content_classification insertion
             $classification = isset($_POST['classification']) ? $_POST['classification'] : 'Public'; // Default to 'Public'
             $view = ($classification === 'Public') ? 'Public' : 'Private';
             $allow_comment = ($classification === 'Public') ? 1 : 0;

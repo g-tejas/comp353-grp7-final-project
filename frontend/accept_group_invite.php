@@ -3,7 +3,7 @@ session_start();
 include 'includes/header.php';
 include 'includes/dbh.inc.php';
 
-// Check if the user is logged in
+// user is logged in?
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();
@@ -24,12 +24,12 @@ if ($result->num_rows > 0) {
     exit();
 }
 
-// Add the user to the group
+// Add current user to the group
 $stmt = $conn->prepare("INSERT INTO group_members (Member_ID, Group_ID, Is_Owner) VALUES (?, ?, 0)");
 $stmt->bind_param("ii", $receiver_id, $group_id);
 
 if ($stmt->execute()) {
-    // Send a confirmation message
+    // confirmation message
     $title = "You have joined the group!";
     $body = "";
     $query = "INSERT INTO private_messages (Sender_ID, Receiver_ID, Title, Body) VALUES (?, ?, ?, ?)";

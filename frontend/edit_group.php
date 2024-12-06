@@ -1,9 +1,9 @@
 <?php
 session_start();
 include 'includes/header.php';
-include 'includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php'; 
 
-// Check if the user is logged in
+// user is logged in?
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();
@@ -12,13 +12,13 @@ if (!isset($_SESSION['user'])) {
 $member_id = $_SESSION['user'];
 
 try {
-    // Fetch the group ID from the GET request
+    // Fetch the group ID
     if (!isset($_GET['id'])) {
         throw new Exception("Group ID is not provided.");
     }
     $group_id = intval($_GET['id']);
 
-    // Fetch the group details from the database
+    // Fetch the group details
     $stmt = $conn->prepare("SELECT Name, Description FROM `group` WHERE Group_ID = ?");
     $stmt->bind_param('i', $group_id);
     $stmt->execute();

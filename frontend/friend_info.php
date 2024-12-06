@@ -3,13 +3,13 @@ session_start();
 include 'includes/header.php';
 include 'includes/dbh.inc.php'; 
 
-// Check if the user is logged in
+// user is logged in?
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();
 }
 
-// Get the friend_id from the query parameter
+// Get friend_id
 if (!isset($_GET['friend_id'])) {
     echo "No friend specified.";
     exit();
@@ -17,7 +17,7 @@ if (!isset($_GET['friend_id'])) {
 
 $friend_id = $_GET['friend_id'];
 
-// Fetch friend data from the database
+// Fetch friend data
 $query = "SELECT * FROM member WHERE Member_ID = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $friend_id);
@@ -35,7 +35,7 @@ if ($result->num_rows > 0) {
     $is_business = $row['Is_Business'];
     $dob = isset($row['Date_of_Birth']) ? $row['Date_of_Birth'] : 'N/A';
 
-    // Determine the privilege level label
+    // privilege level label
     switch ($privilege_level) {
         case 3:
             $privilege_label = "Admin";
@@ -55,7 +55,7 @@ if ($result->num_rows > 0) {
     exit();
 }
 
-//Fetch the friends status (Colleague, Friend, Family)
+//get friends status (Colleague, Friend, Family)
 $member_id = $_SESSION['user'];
 $query = "SELECT Type FROM member_relationship WHERE Member_1_ID = ? AND Member_2_ID = ?";
 $stmt = $conn->prepare($query);
@@ -65,7 +65,7 @@ $result = $stmt->get_result();
 $relationship_type= $result->fetch_assoc()['Type'];
 
 
-//Fetch the friends accessibility (Blocked,Public,Private)
+//friends accessibility (Blocked,Public,Private)
 $member_id = $_SESSION['user'];
 $query = "SELECT Accessibility FROM profile_accessibility WHERE Member_ID = ? AND Target_ID = ?";
 $stmt = $conn->prepare($query);
@@ -74,7 +74,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 $privacy= $result->fetch_assoc()['Accessibility'];
 
-// Fetch user accessibility to friend's profile (Blocked, Public, Private)
+//user accessibility to friend's profile (Blocked, Public, Private)
 $query = "SELECT Accessibility FROM profile_accessibility WHERE Member_ID = ? AND Target_ID = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("ii", $friend_id, $member_id);

@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-include 'includes/dbh.inc.php'; // Ensure this path is correct
+include 'includes/dbh.inc.php'; 
 
-// Check if the user is logged in
+// user logged in?
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();
@@ -13,7 +13,7 @@ $receiver_id = $_SESSION['user'];
 $sender_id = $_POST['sender_id']; 
 
 
-// Retrieve the sender's pseudonym
+// fetch the sender's pseudonym
 $query = "SELECT Pseudonym FROM member WHERE Member_ID = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $receiver_id);
@@ -28,7 +28,7 @@ if ($result->num_rows > 0) {
     exit();
 }
 
-// Check if the relationship already exists
+// Check relationship 
 $query = "SELECT * FROM member_relationship WHERE (Member_1_ID = ? AND Member_2_ID = ?) OR (Member_1_ID = ? AND Member_2_ID = ?)";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("iiii", $receiver_id, $sender_id, $sender_id, $receiver_id);
@@ -46,14 +46,14 @@ $stmt = $conn->prepare($query);
 $stmt->bind_param("iiii", $receiver_id, $sender_id, $sender_id, $receiver_id);
 
 if ($stmt->execute()) {
-    // Send a confirmation message
+    // Send confirmation message
     $title = "You are now friends with " . htmlspecialchars($sender_pseudonym);
     $query = "INSERT INTO private_messages (Sender_ID, Receiver_ID, Title, Body) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("iiss", $receiver_id, $sender_id, $title, $body);
 
     if ($stmt->execute()) {
-        // Set the profile accessibility as private
+        // Set profile accessibility to private
         $query = "INSERT INTO profile_accessibility (Member_ID, Target_ID, Accessibility) VALUES (?, ?, 'Private'), (?, ?, 'Private')";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("iiii", $receiver_id, $sender_id, $sender_id, $receiver_id);
