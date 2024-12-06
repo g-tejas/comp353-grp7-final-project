@@ -141,7 +141,7 @@ $content = $result_content->fetch_all(MYSQLI_ASSOC);
                 </div>
             </div>
 
-            <div class="card mb-4">
+<!-- <div class="card mb-4">
     <div class="card-header">
         <h5 class="mb-0">Invite Members</h5>
     </div>
@@ -164,7 +164,7 @@ $content = $result_content->fetch_all(MYSQLI_ASSOC);
         </form>
         <div id="invite-response" class="mt-3"></div>
     </div>
-</div>
+</div> -->
 
             <div class="col-md-8">
                 <div class="card mb-4">

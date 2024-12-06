@@ -211,22 +211,30 @@ try {
             </form>
         <?php endif; ?>
 
-        <h2>Add Members</h2>
-        <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . '?id=' . $group_id); ?>">
+        <div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Invite Members</h5>
+    </div>
+    <div class="card-body">
+        <form action="invite_to_group.php" method="POST" class="invite-form">
             <div class="form-group">
-                <label for="emails">Email Addresses (comma-separated)</label>
-                <input type="text" class="form-control" id="emails" name="emails" required>
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
             </div>
             <div class="form-group">
-                <label for="pseudonyms">Pseudonyms (comma-separated)</label>
-                <input type="text" class="form-control" id="pseudonyms" name="pseudonyms" required>
+                <label for="pseudonym">Pseudonym</label>
+                <input type="text" class="form-control" id="pseudonym" name="pseudonym" placeholder="Enter pseudonym" required>
             </div>
             <div class="form-group">
-                <label for="dates_of_birth">Dates of Birth (comma-separated, YYYY-MM-DD format)</label>
-                <input type="text" class="form-control" id="dates_of_birth" name="dates_of_birth" required>
+                <label for="date_of_birth">Date of Birth</label>
+                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
             </div>
-            <button type="submit" class="btn btn-primary" name="add_members">Add Members</button>
+            <input type="hidden" name="group_id" value="<?php echo $group_id; ?>">
+            <button type="submit" class="btn btn-primary">Invite</button>
         </form>
+        <div id="invite-response" class="mt-3"></div>
+    </div>
+</div>
 <?php else: ?>
     <p class="alert alert-danger">Group details not found.</p>
 <?php endif; ?>
