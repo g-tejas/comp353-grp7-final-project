@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 include 'includes/dbh.inc.php'; // Ensure this path is correct
 
 // Check if the user is logged in
