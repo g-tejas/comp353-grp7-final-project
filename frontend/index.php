@@ -52,25 +52,6 @@ $result = $stmt->get_result();
             </div>
         </div>
 
-        <!-- Recent Activity -->
-        <div class="card recent-activity">
-            <h3>Recent Activity</h3>
-            <!-- TODO: Replace with actual activity data -->
-            <div class="activity-list">
-                <div class="activity-item">
-                    <p>New post in "Local Community Group"</p>
-                    <small>2 hours ago</small>
-                </div>
-                <div class="activity-item">
-                    <p>Event reminder: Monthly Meeting</p>
-                    <small>5 hours ago</small>
-                </div>
-                <div class="activity-item">
-                    <p>New friend request from Jane Doe</p>
-                    <small>Yesterday</small>
-                </div>
-            </div>
-        </div>
 
         <!-- Posting Contents -->
         <div class="card post-contents">
