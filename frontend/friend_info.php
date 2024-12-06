@@ -152,23 +152,25 @@ $conn->close();
         </form>
     </div>
 
-    <div class="profile-groups card">
-        <h3>Groups</h3>
-        <!-- TODO: Replace with actual group data -->
-        <ul>
-            <li>Local Community Group</li>
-            <li>Environmental Awareness</li>
-            <li>Tech Enthusiasts</li>
-        </ul>
-    </div>
-
-    <div class="profile-posts card">
-        <h3>Recent Posts</h3>
-        <!-- TODO: Replace with actual post data -->
-        <div class="post">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            <small>Posted: 2024-03-20</small>
+    <?php if ($privacy_on_user == 'Public'): ?>
+        <div class="profile-groups card">
+            <h3>Groups</h3>
+            <!-- TODO: Replace with actual group data -->
+            <ul>
+                <li>Local Community Group</li>
+                <li>Environmental Awareness</li>
+                <li>Tech Enthusiasts</li>
+            </ul>
         </div>
-    </div>
+
+        <div class="profile-posts card">
+            <h3>Recent Posts</h3>
+            <!-- TODO: Replace with actual post data -->
+            <div class="post">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <small>Posted: 2024-03-20</small>
+            </div>
+        </div>
+    <?php endif; ?>
 </body>
 </html>
