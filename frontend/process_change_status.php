@@ -13,7 +13,6 @@ $stmt = $conn->prepare($query);
 $stmt->bind_param("si", $status, $member_id);
 
 if ($stmt->execute()) {
-    echo "Status updated successfully.";
     header("Location: admin_users.php");
     exit();
 } else {

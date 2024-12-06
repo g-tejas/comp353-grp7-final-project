@@ -50,7 +50,6 @@ if ($result->num_rows > 0) {
     $stmt->bind_param("iiss", $sender_id, $receiver_id, $title, $body);
 
     if ($stmt->execute()) {
-        echo "Friend request sent successfully.";
         header("Location: friends.php");
         exit();
     } else {
