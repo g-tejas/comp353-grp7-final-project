@@ -45,7 +45,7 @@ $conn->close();
 <body>
     <div class="container">
         <h2>Create Message</h2>
-        <form action="processes/send_message.php" method="POST">
+        <form action="process_send_message.php" method="POST">
             <div class="form-group">
                 <label for="friend">Select Friend</label>
                 <select class="form-control" id="friend" name="friend" required>
