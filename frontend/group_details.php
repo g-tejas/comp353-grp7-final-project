@@ -48,21 +48,43 @@ try {
     $members = $result_members->fetch_all(MYSQLI_ASSOC);
 
     // Fetch the group content (posts, events, etc.)
-    $stmt_content = $conn->prepare("SELECT c.Content_ID, c.Title, c.Body, c.Timestamp, c.Is_Event, 
-                                    c.Event_Date_and_time, c.Event_Location, m.Pseudonym AS Author
-                           FROM content c
-                           JOIN member m ON c.Member_ID = m.Member_ID
-                           WHERE c.Group_ID = ?
-                           ORDER BY c.Timestamp DESC");
-    $stmt_content->bind_param('i', $group_id);
-    $stmt_content->execute();
-    $result_content = $stmt_content->get_result();
-    $content = $result_content->fetch_all(MYSQLI_ASSOC);
+$stmt_content = $conn->prepare("SELECT c.Content_ID, c.Title, c.Body, c.Timestamp, c.Is_Event, 
+c.Event_Date_and_time, c.Event_Location, m.Pseudonym AS Author,
+cc.View
+FROM content c
+JOIN member m ON c.Member_ID = m.Member_ID
+JOIN content_classification cc ON c.Content_ID = cc.Content_ID
+WHERE c.Group_ID = ?
+ORDER BY c.Timestamp DESC");
+$stmt_content->bind_param('i', $group_id);
+$stmt_content->execute();
+$result_content = $stmt_content->get_result();
+$content = $result_content->fetch_all(MYSQLI_ASSOC);
+
+    
 
     // Close statements
     $stmt_group->close();
     $stmt_members->close();
     $stmt_content->close();
+
+    // Fetch the comments for each content item
+    $stmt_comments = $conn->prepare("SELECT c.Body, c.Timestamp, m.Pseudonym AS Author
+                                     FROM comment c
+                                     JOIN member m ON c.Member_ID = m.Member_ID
+                                     WHERE c.Content_ID = ?
+                                     ORDER BY c.Timestamp ASC");
+
+    foreach ($content as &$item) {
+        $stmt_comments->bind_param('i', $item['Content_ID']);
+        $stmt_comments->execute();
+        $result_comments = $stmt_comments->get_result();
+        $item['comments'] = $result_comments->fetch_all(MYSQLI_ASSOC);
+    }
+
+    $stmt_comments->close();
+
+    
 } catch (Exception $e) {
     // Log the error
     error_log("Group details error: " . $e->getMessage());
@@ -119,6 +141,31 @@ try {
                 </div>
             </div>
 
+            <div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Invite Members</h5>
+    </div>
+    <div class="card-body">
+        <form action="invite_to_group.php" method="POST" class="invite-form">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
+            </div>
+            <div class="form-group">
+                <label for="pseudonym">Pseudonym</label>
+                <input type="text" class="form-control" id="pseudonym" name="pseudonym" placeholder="Enter pseudonym" required>
+            </div>
+            <div class="form-group">
+                <label for="date_of_birth">Date of Birth</label>
+                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
+            </div>
+            <input type="hidden" name="group_id" value="<?php echo $group_id; ?>">
+            <button type="submit" class="btn btn-primary">Invite</button>
+        </form>
+        <div id="invite-response" class="mt-3"></div>
+    </div>
+</div>
+
             <div class="col-md-8">
                 <div class="card mb-4">
                     <div class="card-body">
@@ -148,6 +195,42 @@ try {
                                                 </small>
                                             </p>
                                         <?php endif; ?>
+
+                                        <?php if ($item['View'] === 'Public'): ?>
+                                    <hr>
+                                    <h6>Comments</h6>
+                                    <?php if (!empty($item['comments'])): ?>
+                                        <?php foreach ($item['comments'] as $comment): ?>
+                                            <div class="card mb-2">
+                                                    <div class="card-body">
+                                                        <p class="card-text"><?php echo htmlspecialchars($comment['Body']); ?></p>
+                                                        <div class="d-flex justify-content-between">
+                                                            <p class="card-text">
+                                                                <small class="text-muted">
+                                                                    Posted by <?php echo htmlspecialchars($comment['Author']); ?>
+                                                                    on <?php echo date('Y-m-d H:i:s', strtotime($comment['Timestamp'])); ?>
+                                                                </small>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <p class="card-text">No comments yet.</p>
+                                    <?php endif; ?>
+                                    <form action="add_comment.php" method="POST">
+                                            <input type="hidden" name="content_id" value="<?php echo $item['Content_ID']; ?>">
+                                            <input type="hidden" name="group_id" value="<?php echo $group_id; ?>">
+                                            <div class="form-group">
+                                                <textarea class="form-control" name="body" rows="2" placeholder="Add a comment..." required></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary btn-sm">Post Comment</button>
+                                        </form>
+                                <?php endif; ?>
+
+
+                                        
+
                                     </div>
                                 </div>
                             <?php endforeach; ?>

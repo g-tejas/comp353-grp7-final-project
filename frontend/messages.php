@@ -62,6 +62,27 @@ $conn->close();
                                 <button type="submit" class="btn btn-primary">Accept Friend Request</button>
                             </form>
                         <?php endif; ?>
+                        <?php
+if (strpos($message['Title'], 'has invited you to a group') !== false) {
+    // Extract the Group ID from the Body
+    $body = $message['Body'];
+    $group_id = null;
+
+    if (preg_match('/Group ID: (\d+)/', $body, $matches)) {
+        $group_id = $matches[1]; // Group ID is captured in $matches[1]
+    } else {
+        echo "Error: Group ID not found in the message.";
+        return; // Stop further execution
+    }
+?>
+    <form action="accept_group_invite.php" method="POST">
+        <input type="hidden" name="sender_id" value="<?php echo htmlspecialchars($message['Sender_ID']); ?>">
+        <input type="hidden" name="group_id" value="<?php echo htmlspecialchars($group_id); ?>">
+        <button type="submit" class="btn btn-primary">Accept Group Invite</button>
+    </form>
+<?php
+}
+?>
                     </li>
                 <?php endforeach; ?>
             </ul>
