@@ -5,6 +5,7 @@ include 'includes/header.php';
 
 // Fetch posts for the logged-in user
 $query = "SELECT * FROM content WHERE Member_ID = ? ORDER BY Timestamp DESC";
+$user_id = $_SESSION['user'];
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -88,11 +89,11 @@ $result = $stmt->get_result();
                             <?php if ($row['Media_Path']): ?>
                                 <?php if (strpos($row['Media_Path'], '.mp4') !== false || strpos($row['Media_Path'], '.webm') !== false): ?>
                                     <video controls style="max-width: 100%; height: auto;">
-                                        <source src="<?php echo htmlspecialchars(str_replace('../', '', $row['Media_Path'])); ?>" type="video/mp4">
+                                        <source src="<?php echo htmlspecialchars(str_replace('..uploads/', '', $row['Media_Path'])); ?>" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>
                                 <?php else: ?>
-                                    <img src="<?php echo htmlspecialchars(str_replace('../', '', $row['Media_Path'])); ?>" alt="Post Media" style="max-width: 100%; height: auto;">
+                                    <img src="<?php echo htmlspecialchars(str_replace('..uploads/', '', $row['Media_Path'])); ?>" alt="Post Media" style="max-width: 100%; height: auto;">
                                 <?php endif; ?>
                             <?php endif; ?>
                             <button class="btn btn-danger" onclick="deletePost(<?php echo $row['Content_ID']; ?>)">Delete</button>

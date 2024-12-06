@@ -120,6 +120,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="body">Body</label>
                 <textarea class="form-control" id="body" name="body" rows="5" required><?php echo isset($body) ? htmlspecialchars($body) : ''; ?></textarea>
             </div>
+            <div class="post-contents">
+                <label for="media">Upload Media (Image/Video):</label>
+                <input type="file" id="media" name="media" accept="image/*,video/*">
+            </div>
             <div class="form-group">
         <label>Classification</label>
         <div class="form-check">
