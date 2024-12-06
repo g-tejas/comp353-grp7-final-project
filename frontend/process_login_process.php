@@ -15,6 +15,11 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
+    if ($row['Status'] == 'Suspended') {
+        $_SESSION['error'] = "Your account is suspended. Please contact the administrator.";
+        header("Location: login.php");
+        exit();
+    }
     // Directly compare the plain text password
     if ($password === $row['Password']) {
         // Set session variables
