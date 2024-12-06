@@ -1,10 +1,11 @@
 <?php
 session_start();
-include '../includes/dbh.inc.php'; // Ensure this path is correct
+
+include 'includes/dbh.inc.php'; // Ensure this path is correct
 
 // Check if the user is logged in
 if (!isset($_SESSION['user'])) {
-    header("Location: ../login.php");
+    header("Location: login.php");
     exit();
 }
 
@@ -41,7 +42,7 @@ $group_id = null; // Assuming this is not associated with a group
 
 if ($stmt->execute()) {
     // Redirect back to the index page or wherever you want
-    header("Location: ../index.php?success=1");
+    header("Location: index.php?success=1");
     exit();
 } else {
     echo "Error: " . $stmt->error;

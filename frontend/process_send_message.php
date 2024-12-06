@@ -1,6 +1,7 @@
 <?php
 session_start();
-include '../includes/dbh.inc.php'; // Ensure this path is correct
+
+include 'includes/dbh.inc.php'; // Ensure this path is correct
 
 // Check if the user is logged in
 if (!isset($_SESSION['user'])) {
@@ -20,7 +21,7 @@ $stmt->bind_param("iiss", $sender_id, $receiver_id, $title, $body);
 
 if ($stmt->execute()) {
     echo "Message sent successfully.";
-    header("Location: ../messages.php");
+    header("Location: messages.php");
     exit();
 } else {
     echo "Error sending message: " . $conn->error;

@@ -7,7 +7,7 @@
         unset($_SESSION['error']);
     }
     ?>
-    <form action="processes/register_process.php" method="POST" onsubmit="return validateForm()">
+    <form action="process_register_process.php" method="POST" onsubmit="return validateForm()">
         <div class="form-group">
             <label for="email">Email (Proton Mail only):</label>
             <input type="email" name="email" id="email" required pattern=".*@proton\..*">

@@ -125,3 +125,4 @@ CREATE TABLE IF NOT EXISTS `profile_accessibility` (
 ) ;
 
 
+INSERT INTO member VALUES ('40122836', 'ADMIN','1998-12-08', '1550 De Maisonneuve West, Montreal, Quebec H3G 2E9','admin@proton.com','ADMIN','No','0','3','Active');

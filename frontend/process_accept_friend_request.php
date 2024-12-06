@@ -1,20 +1,22 @@
 <?php
 session_start();
-include '../includes/dbh.inc.php'; // Ensure this path is correct
+
+include 'includes/dbh.inc.php'; // Ensure this path is correct
 
 // Check if the user is logged in
 if (!isset($_SESSION['user'])) {
-    header("Location: ../login.php");
+    header("Location: login.php");
     exit();
 }
 
 $receiver_id = $_SESSION['user'];
-$sender_id = $_POST['sender_id']; // This should be passed from the message
+$sender_id = $_POST['sender_id']; 
+
 
 // Retrieve the sender's pseudonym
 $query = "SELECT Pseudonym FROM member WHERE Member_ID = ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $sender_id);
+$stmt->bind_param("i", $receiver_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -45,21 +47,28 @@ $stmt->bind_param("iiii", $receiver_id, $sender_id, $sender_id, $receiver_id);
 
 if ($stmt->execute()) {
     // Send a confirmation message
-    $title = "You are now friends!";
-    $body = "";
+    $title = "You are now friends with " . htmlspecialchars($sender_pseudonym);
     $query = "INSERT INTO private_messages (Sender_ID, Receiver_ID, Title, Body) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("iiss", $receiver_id, $sender_id, $title, $body);
 
     if ($stmt->execute()) {
-        echo "Friend request accepted successfully.";
-        header("Location: ../messages.php");
-        exit();
+        // Set the profile accessibility as private
+        $query = "INSERT INTO profile_accessibility (Member_ID, Target_ID, Accessibility) VALUES (?, ?, 'Private'), (?, ?, 'Private')";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("iiii", $receiver_id, $sender_id, $sender_id, $receiver_id);
+
+        if ($stmt->execute()) {
+            header("Location: messages.php");
+            exit();
+        } else {
+            echo "Error setting the friends privacy: " . $stmt->error;
+        }
     } else {
-        echo "Error sending confirmation message: " . $conn->error;
+        echo "Error sending confirmation message: " . $stmt->error;
     }
 } else {
-    echo "Error updating relationship: " . $conn->error;
+    echo "Error updating relationship: " . $stmt->error;
 }
 
 $stmt->close();
