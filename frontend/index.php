@@ -75,7 +75,7 @@ $result = $stmt->get_result();
         <!-- Posting Contents -->
         <div class="card post-contents">
             <h3>Post Contents</h3>
-            <form action="processes/post_process.php" method="POST" enctype="multipart/form-data">
+            <form action="process_post_process.php" method="POST" enctype="multipart/form-data">
                 <div class="post-contents">
                     <label for="content">Content:</label>
                     <textarea id="content" name="content" rows="3" required></textarea>
@@ -129,7 +129,7 @@ $result = $stmt->get_result();
     function deletePost(postId) {
         if (confirm("Are you sure you want to delete this post?")) {
             // Redirect to the delete script
-            window.location.href = 'processes/delete_process.php?id=' + postId;
+            window.location.href = 'process_delete_process.php?id=' + postId;
         }
     }
 </script>

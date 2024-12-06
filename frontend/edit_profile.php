@@ -56,7 +56,7 @@ if (!isset($_SESSION['pseudonym']) || !isset($_SESSION['address']) || !isset($_S
 <body>
     <div class="container">
         <h2>Edit Profile</h2>
-        <form action="processes/update_profile.php" method="POST" onsubmit="return validateForm()">
+        <form action="process_update_profile.php" method="POST" onsubmit="return validateForm()">
             <div class="form-group">
                 <label for="pseudonym">Pseudonym</label>
                 <textarea class="form-control" id="pseudonym" name="pseudonym" rows="1"><?php echo htmlspecialchars($_SESSION['pseudonym']); ?></textarea>

@@ -122,7 +122,7 @@ $conn->close();
 
     <div class="relationship-change card">
         <h3>Change Relationship Type</h3>
-        <form action="processes/change_relationship_type.php" method="POST">
+        <form action="process_change_relationship_type.php" method="POST">
             <input type="hidden" name="friend_id" value="<?php echo htmlspecialchars($friend_id); ?>">
             <div class="form-group">
                 <label for="relationship_type">Select Relationship Type</label>
@@ -138,7 +138,7 @@ $conn->close();
 
     <div class="privacy-change card">
         <h3>Set Privacy for this User</h3>
-        <form action="processes/set_privacy.php" method="POST">
+        <form action="process_set_privacy.php" method="POST">
             <input type="hidden" name="friend_id" value="<?php echo htmlspecialchars($friend_id); ?>">
             <div class="form-group">
                 <label for="privacy">Select Level of Privacy</label>

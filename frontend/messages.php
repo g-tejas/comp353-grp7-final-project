@@ -57,7 +57,7 @@ $conn->close();
                         <h3 class="message-title"><?php echo htmlspecialchars($message['Title']); ?></h3>
                         <p class="message-body"><?php echo htmlspecialchars($message['Body']); ?></p>
                         <?php if (strpos($message['Title'], 'has sent you a friend request') !== false): ?>
-                            <form action="processes/accept_friend_request.php" method="POST">
+                            <form action="process_accept_friend_request.php" method="POST">
                                 <input type="hidden" name="sender_id" value="<?php echo htmlspecialchars($message['Sender_ID']); ?>">
                                 <button type="submit" class="btn btn-primary">Accept Friend Request</button>
                             </form>
