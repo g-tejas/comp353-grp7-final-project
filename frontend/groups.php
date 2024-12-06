@@ -29,6 +29,22 @@ if (!isset($_SESSION['pseudonym'])) {
         error_log("Error fetching user pseudonym: " . $e->getMessage());
         // Continue without stopping the page
     }
+
+    // Fetch user privilege level
+$stmt = $conn->prepare("SELECT Privilege_Level FROM member WHERE Member_ID = ?");
+$stmt->bind_param('i', $member_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $privilege_level = $row['Privilege_Level'];
+} else {
+    // Handle the case when the user is not found in the database
+    $privilege_level = 0; // Assume the lowest privilege level
+}
+
+$stmt->close();
 }
 
 try {
@@ -97,10 +113,11 @@ $conn->close();
             </div>
         <?php endif; ?>
 
-        <div class="mt-4 text-center">
-            <a href="create_group.php" class="btn btn-primary">Create a New Group</a>
-        </div>
-    </div>
+        <?php if ($privilege_level > 1): ?>
+            <div class="mt-4 text-center">
+                <a href="create_group.php" class="btn btn-primary">Create a New Group</a>
+            </div>
+        <?php endif; ?>
 
     <?php include 'includes/footer.php'; ?>
 </body>
