@@ -1,12 +1,15 @@
 <?php
 session_start();
 include 'includes/header.php';
-include 'includes/dbh.inc.php';
+include 'includes/dbh.inc.php'; // Ensure this path is correct
 
 
-// Fetch all members
-$query = "SELECT * FROM member";
+$admin_id = $_SESSION['user'];
+
+// Fetch all members excluding the admin user
+$query = "SELECT * FROM member WHERE Member_ID != ?";
 $stmt = $conn->prepare($query);
+$stmt->bind_param("i", $admin_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
