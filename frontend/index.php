@@ -64,7 +64,7 @@ $result = $stmt->get_result();
                             <p><?php echo htmlspecialchars($row['Body']); ?></p>
                             <?php if ($row['Media_Path']): ?>
                                 <?php if (strpos($row['Media_Path'], '.mp4') !== false || strpos($row['Media_Path'], '.webm') !== false): ?>
-                                    <video controls style="max-width: 100%; height: auto;">
+                                    <video controls style="max-width: 50%; height: auto;">
                                         <source src="<?php echo htmlspecialchars(str_replace('..uploads/', '', $row['Media_Path'])); ?>" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>

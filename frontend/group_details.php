@@ -201,7 +201,7 @@ $content = $result_content->fetch_all(MYSQLI_ASSOC);
                                             <?php if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $mediaPath)): ?>
                                                 <img src="<?php echo $mediaPath; ?>" alt="Post Image" style="max-width: 100%;">
                                             <?php elseif (preg_match('/\.(mp4|webm|ogg)$/i', $mediaPath)): ?>
-                                                <video controls style="max-width: 100%;">
+                                                <video controls style="max-width: 50%;">
                                                     <source src="<?php echo $mediaPath; ?>" type="video/mp4">
                                                     Your browser does not support the video tag.
                                                 </video>
