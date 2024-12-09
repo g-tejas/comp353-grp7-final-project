@@ -7,7 +7,19 @@
 | Jihan Moon | 40170485 | mjh000602@gmail.com |
 | Geeneth Kulatunge | 40195350 | kulatungegeeneth@gmail.com |
 | Tejas Garrepally | 40322722 | e0957366@u.nus.edu |
-| Arthur Mosnier | 40122836 | arthur.mosnier@gmail.com |
+| Arthur Mosnier | 40122836 | a_mosnie_live_concordia_ca |
+
+Project Description)
+
+The objective of our project was to design a relational database system for a Private Online Community Social Network System (COSN). In response to the many concerns about online social media and community services controlled by big companies that use them to mine user data and lack transparency in many aspects, our design provides local communities with an open source system that runs on a local server.
+
+The application is a two-tier system, which supports any popular web browser at the client side and secure http server with PHP parser and a MySQL database at the server side.
+
+The main idea of the implementation is to create a community, controlled and supervised by an Admin user.
+In this community, there will be many groups, where users can post text, video and images. Other users that are members of a specific group may comment on other group member’s posts, if the original poster allows it.
+Users will also add other users as friends and can message each other through private messages. 
+Users have status and privilege. Privilege can be Junior (by default, it is the lowest privilege and only allows joining groups, adding friends, messaging friends, posting and commenting in groups they are a member of), Senior (in addition to all the the junior privileges, seniors can create groups making them the owner of such groups) and Admin (admins can change the privilege and status of any user and delete groups, they also need to approve all the content in the community). Status can be active, inactive (user will not be visible to other users) or suspended (user cannot log in until admin allows it by changing his status). 
+On their homepage, each user can see their posts, the newest posts in the groups they are members of and all the posts and comments made by friends (whose profile is set to public for the user).
 
 
 
