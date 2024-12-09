@@ -5,6 +5,7 @@ include 'includes/header.php';
 
 // Fetch posts for the logged-in user
 $query = "SELECT * FROM content WHERE Member_ID = ? ORDER BY Timestamp DESC";
+$user_id = $_SESSION['user'];
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -52,31 +53,6 @@ $result = $stmt->get_result();
             </div>
         </div>
 
-
-        <!-- Posting Contents -->
-        <div class="card post-contents">
-            <h3>Post Contents</h3>
-            <form action="process_post_process.php" method="POST" enctype="multipart/form-data">
-                <div class="post-contents">
-                    <label for="content">Content:</label>
-                    <textarea id="content" name="content" rows="3" required></textarea>
-                </div>
-                <div class="post-contents">
-                    <label for="media">Upload Media (Image/Video):</label>
-                    <input type="file" id="media" name="media" accept="image/*,video/*">
-                </div>
-                <div class="post-contents">
-                    <label for="visibility">Visibility:</label>
-                    <select id="visibility" name="visibility" required>
-                        <option value="1">Public</option>
-                        <option value="2">Friends</option>
-                        <option value="3">Private</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Post</button>
-            </form>
-        </div>
-
         <!-- Displaying Posts -->
         <div class="card display-posts">
             <h3>Your Posts</h3>
@@ -84,18 +60,18 @@ $result = $stmt->get_result();
                 <?php if ($result->num_rows > 0): ?>
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <div class="post-item">
+                            <h4><?php echo htmlspecialchars($row['Title']); ?></h4>
                             <p><?php echo htmlspecialchars($row['Body']); ?></p>
                             <?php if ($row['Media_Path']): ?>
                                 <?php if (strpos($row['Media_Path'], '.mp4') !== false || strpos($row['Media_Path'], '.webm') !== false): ?>
                                     <video controls style="max-width: 100%; height: auto;">
-                                        <source src="<?php echo htmlspecialchars(str_replace('../', '', $row['Media_Path'])); ?>" type="video/mp4">
+                                        <source src="<?php echo htmlspecialchars(str_replace('..uploads/', '', $row['Media_Path'])); ?>" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>
                                 <?php else: ?>
-                                    <img src="<?php echo htmlspecialchars(str_replace('../', '', $row['Media_Path'])); ?>" alt="Post Media" style="max-width: 100%; height: auto;">
+                                    <img src="<?php echo htmlspecialchars(str_replace('..uploads/', '', $row['Media_Path'])); ?>" alt="Post Media" style="max-width: 100%; height: auto;">
                                 <?php endif; ?>
                             <?php endif; ?>
-                            <button class="btn btn-danger" onclick="deletePost(<?php echo $row['Content_ID']; ?>)">Delete</button>
                         </div>
                     <?php endwhile; ?>
                 <?php else: ?>
@@ -105,15 +81,6 @@ $result = $stmt->get_result();
         </div>
     <?php endif; ?>
 </div>
-
-<script>
-    function deletePost(postId) {
-        if (confirm("Are you sure you want to delete this post?")) {
-            // Redirect to the delete script
-            window.location.href = 'process_delete_process.php?id=' + postId;
-        }
-    }
-</script>
 
 <?php 
 $stmt->close();

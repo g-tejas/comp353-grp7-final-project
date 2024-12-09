@@ -33,6 +33,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Body is required.";
     }
 
+    // Handle file upload
+    $media = $_FILES['media'] ?? null;
+    $mediaPath = '';
+
+    if ($media && $media['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = 'uploads/'; // Ensure this directory exists and is writable
+        $mediaPath = $uploadDir . basename($media['name']);
+        
+        // Move the uploaded file to the desired directory
+        if (!move_uploaded_file($media['tmp_name'], $mediaPath)) {
+            $errors[] = "Failed to upload media.";
+        }
+    }
+
     // no errors - create content
     if (empty($errors)) {
         try {
@@ -40,8 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $conn->autocommit(FALSE);
 
             // Prepare and execute content insertion
-            $stmt = $conn->prepare("INSERT INTO content (Group_ID, Member_ID, Body, Title) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param('iiss', $group_id, $member_id, $body, $title);
+            $stmt = $conn->prepare("INSERT INTO content (Group_ID, Member_ID, Body, Title, Media_Path) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param('iisss', $group_id, $member_id, $body, $title, $mediaPath);
 
             if (!$stmt->execute()) {
                 throw new Exception("Failed to create content: " . $stmt->error);
@@ -111,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif; ?>
 
-        <form action="create_content.php?group_id=<?php echo $group_id; ?>" method="POST">
+        <form action="create_content.php?group_id=<?php echo $group_id; ?>" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="title">Title</label>
                 <input type="text" class="form-control" id="title" name="title" value="<?php echo isset($title) ? htmlspecialchars($title) : ''; ?>" required maxlength="50">
@@ -119,6 +133,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="form-group">
                 <label for="body">Body</label>
                 <textarea class="form-control" id="body" name="body" rows="5" required><?php echo isset($body) ? htmlspecialchars($body) : ''; ?></textarea>
+            </div>
+            <div class="post-contents">
+                <label for="media">Upload Media (Image/Video):</label>
+                <input type="file" id="media" name="media" accept="image/*,video/*">
             </div>
             <div class="form-group">
         <label>Classification</label>

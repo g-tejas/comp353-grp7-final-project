@@ -50,7 +50,7 @@ try {
     // Fetch the group content
 $stmt_content = $conn->prepare("SELECT c.Content_ID, c.Title, c.Body, c.Timestamp, c.Is_Event, 
 c.Event_Date_and_time, c.Event_Location, m.Pseudonym AS Author,
-cc.View
+cc.View, c.Media_Path
 FROM content c
 JOIN member m ON c.Member_ID = m.Member_ID
 JOIN content_classification cc ON c.Content_ID = cc.Content_ID
@@ -195,6 +195,18 @@ $content = $result_content->fetch_all(MYSQLI_ASSOC);
                                                 </small>
                                             </p>
                                         <?php endif; ?>
+                                        <!-- Display media if available -->
+                                        <?php if (!empty($item['Media_Path'])): ?>
+                                            <?php $mediaPath = htmlspecialchars($item['Media_Path']); ?>
+                                            <?php if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $mediaPath)): ?>
+                                                <img src="<?php echo $mediaPath; ?>" alt="Post Image" style="max-width: 100%;">
+                                            <?php elseif (preg_match('/\.(mp4|webm|ogg)$/i', $mediaPath)): ?>
+                                                <video controls style="max-width: 100%;">
+                                                    <source src="<?php echo $mediaPath; ?>" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
 
                                         <?php if ($item['View'] === 'Public'): ?>
                                     <hr>
@@ -227,10 +239,6 @@ $content = $result_content->fetch_all(MYSQLI_ASSOC);
                                             <button type="submit" class="btn btn-primary btn-sm">Post Comment</button>
                                         </form>
                                 <?php endif; ?>
-
-
-                                        
-
                                     </div>
                                 </div>
                             <?php endforeach; ?>
