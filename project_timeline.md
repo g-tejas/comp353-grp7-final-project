@@ -35,5 +35,6 @@ gantt
     Gift Exchange (Tejas)                 :2024-12-08, 1d
     
     section Documentation
+    Preliminary Project Report (Tejas)    :2024-12-05, 1d
     Installation Guide (Tejas)            :2024-12-09, 1d
 ```
