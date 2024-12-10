@@ -13,7 +13,6 @@ $stmt = $conn->prepare($query);
 $stmt->bind_param("ii", $privilege, $member_id);
 
 if ($stmt->execute()) {
-    echo "Privilege level updated successfully.";
     header("Location: admin_users.php");
     exit();
 } else {

@@ -17,7 +17,6 @@ $stmt = $conn->prepare($query);
 $stmt->bind_param("siiii", $type, $member_id, $friend_id, $friend_id, $member_id);
 
 if ($stmt->execute()) {
-    echo "Relationship type updated successfully.";
     header("Location: friend_info.php?friend_id=" . $friend_id);
     exit();
 } else {

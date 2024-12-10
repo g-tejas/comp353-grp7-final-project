@@ -50,7 +50,7 @@ try {
     // Fetch the group content
 $stmt_content = $conn->prepare("SELECT c.Content_ID, c.Title, c.Body, c.Timestamp, c.Is_Event, 
 c.Event_Date_and_time, c.Event_Location, m.Pseudonym AS Author,
-cc.View
+cc.View, c.Media_Path
 FROM content c
 JOIN member m ON c.Member_ID = m.Member_ID
 JOIN content_classification cc ON c.Content_ID = cc.Content_ID
@@ -61,7 +61,30 @@ $stmt_content->execute();
 $result_content = $stmt_content->get_result();
 $content = $result_content->fetch_all(MYSQLI_ASSOC);
 
-    
+    // Fetch active gift exchanges for this group
+    $stmt_exchanges = $conn->prepare("SELECT ge.*, m.Pseudonym as Creator_Name, 
+        (SELECT COUNT(*) FROM gift_exchange_participants WHERE Exchange_ID = ge.Exchange_ID) as Participant_Count
+        FROM gift_exchange ge
+        JOIN member m ON ge.Created_By = m.Member_ID
+        WHERE ge.Group_ID = ? AND ge.Status = 'Active'
+        ORDER BY ge.Created_At DESC");
+    $stmt_exchanges->bind_param('i', $group_id);
+    $stmt_exchanges->execute();
+    $result_exchanges = $stmt_exchanges->get_result();
+    $active_exchanges = $result_exchanges->fetch_all(MYSQLI_ASSOC);
+    $stmt_exchanges->close();
+
+    // Check if user is part of any active exchanges
+    $stmt_participant = $conn->prepare("SELECT gep.Exchange_ID, gep.Receiver_ID, m.Pseudonym as Receiver_Name
+        FROM gift_exchange_participants gep
+        LEFT JOIN member m ON gep.Receiver_ID = m.Member_ID
+        WHERE gep.Giver_ID = ? AND Exchange_ID IN 
+        (SELECT Exchange_ID FROM gift_exchange WHERE Group_ID = ? AND Status = 'Active')");
+    $stmt_participant->bind_param('ii', $member_id, $group_id);
+    $stmt_participant->execute();
+    $result_participant = $stmt_participant->get_result();
+    $user_exchanges = $result_participant->fetch_all(MYSQLI_ASSOC);
+    $stmt_participant->close();
 
     // Close statements
     $stmt_group->close();
@@ -139,32 +162,111 @@ $content = $result_content->fetch_all(MYSQLI_ASSOC);
                         </ul>
                     </div>
                 </div>
-            </div>
 
-<!-- <div class="card mb-4">
-    <div class="card-header">
-        <h5 class="mb-0">Invite Members</h5>
-    </div>
-    <div class="card-body">
-        <form action="invite_to_group.php" method="POST" class="invite-form">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
+                <!-- Gift Exchange Section -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Gift Exchanges</h5>
+                        
+                        <!-- User's Active Exchanges -->
+                        <?php if (!empty($user_exchanges)): ?>
+                            <div class="alert alert-info">
+                                <h6>Your Active Exchanges</h6>
+                                <?php foreach ($user_exchanges as $exchange): ?>
+                                    <div class="mb-2">
+                                        <?php if ($exchange['Receiver_ID']): ?>
+                                            You are gifting to: <strong><?php echo htmlspecialchars($exchange['Receiver_Name']); ?></strong>
+                                        <?php else: ?>
+                                            Waiting for gift assignment...
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Active Exchanges List -->
+                        <?php if (!empty($active_exchanges)): ?>
+                            <?php foreach ($active_exchanges as $exchange): ?>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            Gift Exchange
+                                            <span class="badge badge-primary"><?php echo $exchange['Participant_Count']; ?> participants</span>
+                                        </h6>
+                                        <p class="card-text">
+                                            <small>
+                                                Budget: $<?php echo $exchange['Budget_Min']; ?> - $<?php echo $exchange['Budget_Max']; ?><br>
+                                                Dates: <?php echo date('M d', strtotime($exchange['Start_Date'])); ?> - 
+                                                      <?php echo date('M d, Y', strtotime($exchange['End_Date'])); ?><br>
+                                                Created by: <?php echo htmlspecialchars($exchange['Creator_Name']); ?>
+                                            </small>
+                                        </p>
+                                        <form action="join_gift_exchange.php" method="POST" class="mt-2">
+                                            <input type="hidden" name="exchange_id" value="<?php echo $exchange['Exchange_ID']; ?>">
+                                            <button type="submit" class="btn btn-sm btn-primary">Join Exchange</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p class="card-text">No active gift exchanges.</p>
+                        <?php endif; ?>
+
+                        <!-- Create New Exchange Button -->
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createExchangeModal">
+                            Create New Gift Exchange
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Create Exchange Modal -->
+                <div class="modal fade" id="createExchangeModal" tabindex="-1" role="dialog" aria-labelledby="createExchangeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="createExchangeModalLabel">Create Gift Exchange</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form action="create_gift_exchange.php" method="POST">
+                                <div class="modal-body">
+                                    <input type="hidden" name="group_id" value="<?php echo $group_id; ?>">
+                                    
+                                    <div class="form-group">
+                                        <label>Budget Range</label>
+                                        <div class="row">
+                                            <div class="col">
+                                                <input type="number" class="form-control" name="budget_min" placeholder="Min $" required>
+                                            </div>
+                                            <div class="col">
+                                                <input type="number" class="form-control" name="budget_max" placeholder="Max $" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>Exchange Dates</label>
+                                        <div class="row">
+                                            <div class="col">
+                                                <input type="date" class="form-control" name="start_date" required>
+                                            </div>
+                                            <div class="col">
+                                                <input type="date" class="form-control" name="end_date" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Create Exchange</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <div class="form-group">
-                <label for="pseudonym">Pseudonym</label>
-                <input type="text" class="form-control" id="pseudonym" name="pseudonym" placeholder="Enter pseudonym" required>
-            </div>
-            <div class="form-group">
-                <label for="date_of_birth">Date of Birth</label>
-                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
-            </div>
-            <input type="hidden" name="group_id" value="<?php echo $group_id; ?>">
-            <button type="submit" class="btn btn-primary">Invite</button>
-        </form>
-        <div id="invite-response" class="mt-3"></div>
-    </div>
-</div> -->
 
             <div class="col-md-8">
                 <div class="card mb-4">
@@ -194,6 +296,18 @@ $content = $result_content->fetch_all(MYSQLI_ASSOC);
                                                     - <?php echo htmlspecialchars($item['Event_Location']); ?>
                                                 </small>
                                             </p>
+                                        <?php endif; ?>
+                                        <!-- Display media if available -->
+                                        <?php if (!empty($item['Media_Path'])): ?>
+                                            <?php $mediaPath = htmlspecialchars($item['Media_Path']); ?>
+                                            <?php if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $mediaPath)): ?>
+                                                <img src="<?php echo $mediaPath; ?>" alt="Post Image" style="max-width: 100%;">
+                                            <?php elseif (preg_match('/\.(mp4|webm|ogg)$/i', $mediaPath)): ?>
+                                                <video controls style="max-width: 50%;">
+                                                    <source src="<?php echo $mediaPath; ?>" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            <?php endif; ?>
                                         <?php endif; ?>
 
                                         <?php if ($item['View'] === 'Public'): ?>
@@ -227,10 +341,6 @@ $content = $result_content->fetch_all(MYSQLI_ASSOC);
                                             <button type="submit" class="btn btn-primary btn-sm">Post Comment</button>
                                         </form>
                                 <?php endif; ?>
-
-
-                                        
-
                                     </div>
                                 </div>
                             <?php endforeach; ?>

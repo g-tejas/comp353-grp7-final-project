@@ -126,3 +126,65 @@ CREATE TABLE IF NOT EXISTS `profile_accessibility` (
 
 
 INSERT INTO member VALUES ('40122836', 'ADMIN','1998-12-08', '1550 De Maisonneuve West, Montreal, Quebec H3G 2E9','admin@proton.com','ADMIN','No','0','3','Active');
+
+CREATE TABLE IF NOT EXISTS `gift_exchange` (
+  `Exchange_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Group_ID` int(11) NOT NULL,
+  `Start_Date` date NOT NULL,
+  `End_Date` date NOT NULL,
+  `Budget_Min` decimal(10,2) DEFAULT NULL,
+  `Budget_Max` decimal(10,2) DEFAULT NULL,
+  `Status` enum('Active','Completed','Cancelled') NOT NULL DEFAULT 'Active',
+  `Created_At` datetime NOT NULL DEFAULT current_timestamp(),
+  `Created_By` int(11) NOT NULL,
+  PRIMARY KEY (`Exchange_ID`),
+  KEY `gift_exchange_Group_ID` (`Group_ID`),
+  KEY `gift_exchange_Created_By` (`Created_By`),
+  CONSTRAINT `gift_exchange_Group_ID` FOREIGN KEY (`Group_ID`) REFERENCES `group` (`Group_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `gift_exchange_Created_By` FOREIGN KEY (`Created_By`) REFERENCES `member` (`Member_ID`) ON DELETE NO ACTION ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `gift_exchange_participants` (
+  `Exchange_ID` int(11) NOT NULL,
+  `Giver_ID` int(11) NOT NULL,
+  `Receiver_ID` int(11) DEFAULT NULL,
+  `Has_Sent_Gift` bit(1) NOT NULL DEFAULT b'0',
+  `Has_Received_Gift` bit(1) NOT NULL DEFAULT b'0',
+  PRIMARY KEY (`Exchange_ID`, `Giver_ID`),
+  KEY `gift_exchange_participants_Giver` (`Giver_ID`),
+  KEY `gift_exchange_participants_Receiver` (`Receiver_ID`),
+  CONSTRAINT `gift_exchange_participants_Exchange_ID` FOREIGN KEY (`Exchange_ID`) REFERENCES `gift_exchange` (`Exchange_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `gift_exchange_participants_Giver` FOREIGN KEY (`Giver_ID`) REFERENCES `member` (`Member_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `gift_exchange_participants_Receiver` FOREIGN KEY (`Receiver_ID`) REFERENCES `member` (`Member_ID`) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `gift_preferences` (
+  `Exchange_ID` int(11) NOT NULL,
+  `Member_ID` int(11) NOT NULL,
+  `Preferences` text DEFAULT NULL,
+  `Allergies` text DEFAULT NULL,
+  `Dislikes` text DEFAULT NULL,
+  PRIMARY KEY (`Exchange_ID`, `Member_ID`),
+  CONSTRAINT `gift_preferences_Exchange_ID` FOREIGN KEY (`Exchange_ID`) REFERENCES `gift_exchange` (`Exchange_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `gift_preferences_Member_ID` FOREIGN KEY (`Member_ID`) REFERENCES `member` (`Member_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `event_options` (
+  `Option_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Content_ID` int(11) NOT NULL,
+  `Date_Time` datetime NOT NULL,
+  `Place` varchar(255) NOT NULL,
+  PRIMARY KEY (`Option_ID`),
+  KEY `event_options_Content_ID` (`Content_ID`),
+  CONSTRAINT `event_options_Content_ID` FOREIGN KEY (`Content_ID`) REFERENCES `content` (`Content_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `event_option_votes` (
+  `Member_ID` int(11) NOT NULL,
+  `Option_ID` int(11) NOT NULL,
+  `Timestamp` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`Member_ID`, `Option_ID`),
+  KEY `event_option_votes_Option_ID` (`Option_ID`),
+  CONSTRAINT `event_option_votes_Member_ID` FOREIGN KEY (`Member_ID`) REFERENCES `member` (`Member_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `event_option_votes_Option_ID` FOREIGN KEY (`Option_ID`) REFERENCES `event_options` (`Option_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+);

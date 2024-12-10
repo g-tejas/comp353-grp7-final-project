@@ -1,0 +1,71 @@
+0d856aa|heyitsarthur|2024-11-18|Update README.md
+ebfe6f0|heyitsarthur|2024-11-18|Update README.md
+6e9fe89|heyitsarthur|2024-11-18|Update README.md
+70b2469|heyitsarthur|2024-11-19|Added SQL for database
+6e9f633|heyitsarthur|2024-11-19|Merge pull request #1 from g-tejas/Database_Arthur
+d304e2f|heyitsarthur|2024-11-19|Update README.md
+a8157d8|heyitsarthur|2024-11-19|Merge pull request #2 from g-tejas/Database_Arthur
+4ee1ab6|heyitsarthur|2024-11-30|removed comments from the db creator
+f4a1e30|heyitsarthur|2024-11-30|Changed the db sql so it works in MySql
+5d3a0c2|heyitsarthur|2024-11-30|Estblished connection with db
+5ebdbcd|heyitsarthur|2024-11-30|Registering works
+882537e|heyitsarthur|2024-11-30|Merge pull request #3 from g-tejas/DB_setup
+c1f3726|heyitsarthur|2024-11-30|added register button
+53e9abb|heyitsarthur|2024-11-30|login and register works
+24c7321|heyitsarthur|2024-11-30|removed dev option from login page
+fd6c09f|heyitsarthur|2024-11-30|removed admin panel from header
+f19da24|heyitsarthur|2024-11-30|User info displayed, but error when logging iin with other users
+ebe65e0|heyitsarthur|2024-11-30|The correct user info is displayed on the user profile page
+94f973a|heyitsarthur|2024-11-30|Merge pull request #4 from g-tejas/DB_setup
+2448f14|heyitsarthur|2024-12-01|Fixed error on welcome back page with the username
+de8173d|heyitsarthur|2024-12-01|Changed privilege level to text on the pfp
+612af5a|heyitsarthur|2024-12-01|added friends page
+7d77c76|heyitsarthur|2024-12-01|Added friend list and friend info page
+9c9c1fd|heyitsarthur|2024-12-01|Changed layout of friend info page
+7f3efc5|heyitsarthur|2024-12-01|Added edit profile (works)
+0148e55|heyitsarthur|2024-12-01|Added change password option
+577dc57|heyitsarthur|2024-12-01|Added button to send friend request
+3acd048|heyitsarthur|2024-12-01|Added timestamp to the message primary key
+7c897b7|heyitsarthur|2024-12-01|Corrected spelling of receiver in DB
+0d73953|heyitsarthur|2024-12-01|messages display correctly
+5f1d190|heyitsarthur|2024-12-01|Added New message button
+7f12b8b|heyitsarthur|2024-12-01|Added create message with friend username selector
+490e9d2|heyitsarthur|2024-12-01|messages work
+80dcdff|heyitsarthur|2024-12-01|You can now add friends based on pseudonym
+865df6b|heyitsarthur|2024-12-01|Changed friend confirmation message
+c9e3328|heyitsarthur|2024-12-01|Merge pull request #5 from g-tejas/User_messages
+8857ef4|heyitsarthur|2024-12-05|Added relationship type info to friends info page
+08fbb30|heyitsarthur|2024-12-05|Users can change relationship type
+5428abc|heyitsarthur|2024-12-05|Can change accessibility of profile for friends, BUT NEED TO SET IT WHEN ADDING A FRIEND
+458e533|heyitsarthur|2024-12-05|Profile accessibility can be set for friends
+fea3d6e|heyitsarthur|2024-12-05|Trying to fix some errors with usernames in friend messages
+ca452b0|heyitsarthur|2024-12-05|Fixed friend message request
+ff85c66|heyitsarthur|2024-12-05|corrected mmesage for accepting friends
+4e33ed9|heyitsarthur|2024-12-05|Profile privacy can be set
+7548d1f|heyitsarthur|2024-12-05|Groups and posts only appear for public friends
+c762823|heyitsarthur|2024-12-05|Added default admin member profile
+12e4fc9|heyitsarthur|2024-12-05|fixed the process directories in code
+ddb411f|heyitsarthur|2024-12-05|directories
+7a4a76e|heyitsarthur|2024-12-05|Merge branch 'master' into fixing_file_structure
+6c4530d|heyitsarthur|2024-12-05|Merge pull request #10 from g-tejas/fixing_file_structure
+0064438|heyitsarthur|2024-12-05|fix
+ecfd8ea|heyitsarthur|2024-12-05|Merge pull request #11 from g-tejas/Last_Fixes_Arthur
+c0dc1f6|heyitsarthur|2024-12-05|Blocked users cannot send messages
+81bfaa8|heyitsarthur|2024-12-05|Merge pull request #12 from g-tejas/Last_Fixes_Arthur
+e1e7f29|heyitsarthur|2024-12-05|Added unfriend feature
+83a0949|heyitsarthur|2024-12-05|unfriend feature
+e80f6d4|heyitsarthur|2024-12-05|Merge pull request #13 from g-tejas/master
+b43d7da|heyitsarthur|2024-12-05|Merge pull request #14 from g-tejas/Last_Fixes_Arthur
+da6609f|heyitsarthur|2024-12-06|Admin can see all the groups
+9de4482|heyitsarthur|2024-12-06|Admin has a page with all members
+217127c|heyitsarthur|2024-12-06|Admin user privilege and status dropdowns
+b4bcdcf|heyitsarthur|2024-12-06|process for privilege and status change by admin
+fddc702|heyitsarthur|2024-12-06|Suspended members cannot log in
+2c7b6b2|heyitsarthur|2024-12-06|Admin can delete groups
+c150238|heyitsarthur|2024-12-06|Minor changes
+2da4c40|heyitsarthur|2024-12-06|users cn see friends and group posts
+29295b2|heyitsarthur|2024-12-06|Merge pull request #16 from g-tejas/Comments_posts_profilepage
+fbdb8a6|heyitsarthur|2024-12-06|removed recent activity from index since it is already in profile
+7588372|heyitsarthur|2024-12-06|Merge pull request #17 from g-tejas/Comments_posts_profilepage
+898f22b|heyitsarthur|2024-12-09|Added description of project to readme
+bf12529|heyitsarthur|2024-12-09|Merge pull request #21 from g-tejas/Readme_projectdescription

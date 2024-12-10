@@ -1,0 +1,11 @@
+1db3894|g-tejas|2024-11-18|feat: added a basic impl
+19b94f4|g-tejas|2024-11-18|feat: added text version of the pdf
+c4b6039|g-tejas|2024-11-18|refactor: move to frontend/ folder
+81ad88e|g-tejas|2024-12-05|feat: flatten dir structure
+909ad89|g-tejas|2024-12-05|feat: change creds
+4ef31da|g-tejas|2024-12-06|fix: fix bug
+1a4e7b1|g-tejas|2024-12-06|fix: remove echo statement
+5dca006|g-tejas|2024-12-06|feat: add ban member button
+6534709|g-tejas|2024-12-08|feat: add gift exchange
+f7ed64b|g-tejas|2024-12-09|docs: add installation guide
+a2c5e91|g-tejas|2024-12-10|feat: add events and voting system

@@ -12,7 +12,6 @@ $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $group_id);
 
 if ($stmt->execute()) {
-    echo "Group deleted successfully.";
     header("Location: admin_groups.php");
     exit();
 } else {

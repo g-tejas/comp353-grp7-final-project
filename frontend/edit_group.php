@@ -208,6 +208,7 @@ try {
                     <input type="text" class="form-control" id="member_ids" name="member_ids" required>
                 </div>
                 <button type="submit" class="btn btn-danger" name="remove_members">Remove Members</button>
+                <button type="submit" class="btn btn-danger" name="remove_members">Ban Member</button>
             </form>
         <?php endif; ?>
 
