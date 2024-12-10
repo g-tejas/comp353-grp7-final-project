@@ -62,7 +62,7 @@ if ($result->num_rows > 0) {
 
         // If the user is not the owner, send a message to the group owner for approval
         if (!$is_owner) {
-            $message_title = "Approval for Group ID: $group_id";
+            $message_title = "$title (Approval: $group_id)";
             $message_body = "$content";
 
             $stmt = $conn->prepare("INSERT INTO private_messages (Sender_ID, Receiver_ID, Title, Body) VALUES (?, ?, ?, ?)");

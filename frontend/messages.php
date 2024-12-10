@@ -65,13 +65,13 @@ $conn->close();
                         
                         
                         <?php
-if (strpos($message['Title'], 'Approval for Group ID:') !== false) {
+if (strpos($message['Title'], 'Approval') !== false) {
     // Extract Group ID from the Title
     $title = $message['Title'];
     $group_id = null;
 
     // Use regex to extract the group ID from the title
-    if (preg_match('/Approval for Group ID: (\d+)/', $title, $matches)) {
+    if (preg_match('/Approval: (\d+)/', $title, $matches)) {
         $group_id = $matches[1]; // Group ID is captured in $matches[1]
     } else {
         // If the group ID is not found in the title, display an error message
