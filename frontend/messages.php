@@ -62,8 +62,38 @@ $conn->close();
                                 <button type="submit" class="btn btn-primary">Accept Friend Request</button>
                             </form>
                         <?php endif; ?>
+                        
+                        
                         <?php
-if (strpos($message['Title'], 'has invited you to a group') !== false) {
+if (strpos($message['Title'], 'Approval for Group ID:') !== false) {
+    // Extract Group ID from the Title
+    $title = $message['Title'];
+    $group_id = null;
+
+    // Use regex to extract the group ID from the title
+    if (preg_match('/Approval for Group ID: (\d+)/', $title, $matches)) {
+        $group_id = $matches[1]; // Group ID is captured in $matches[1]
+    } else {
+        // If the group ID is not found in the title, display an error message
+        echo "<p>Error: Group ID not found in the message. Please contact support.</p>";
+        exit;  // Exit to prevent the form from rendering
+    }
+?>
+    <!-- Form for approving the content -->
+    <form action="process_approve_content.php" method="POST">
+        <input type="hidden" name="sender_id" value="<?php echo htmlspecialchars($message['Sender_ID']); ?>">
+        <input type="hidden" name="title" value="<?php echo htmlspecialchars($message['Title']); ?>">
+        <input type="hidden" name="body" value="<?php echo htmlspecialchars($message['Body']); ?>">
+        <input type="hidden" name="group_id" value="<?php echo htmlspecialchars($group_id); ?>">
+        <button type="submit" class="btn btn-primary">Approve Content</button>
+    </form>
+<?php
+}
+?>
+                        
+                        
+                        <?php
+                        if (strpos($message['Title'], 'has invited you to a group') !== false) {
     // Extract Group ID from the Body
     $body = $message['Body'];
     $group_id = null;
