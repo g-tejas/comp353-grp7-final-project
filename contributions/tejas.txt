@@ -8,3 +8,4 @@ c4b6039|g-tejas|2024-11-18|refactor: move to frontend/ folder
 5dca006|g-tejas|2024-12-06|feat: add ban member button
 6534709|g-tejas|2024-12-08|feat: add gift exchange
 f7ed64b|g-tejas|2024-12-09|docs: add installation guide
+a2c5e91|g-tejas|2024-12-10|feat: add events and voting system

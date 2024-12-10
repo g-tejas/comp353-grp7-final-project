@@ -24,6 +24,7 @@ gantt
     Groups Implementation (Geeneth)        :2024-12-03, 2d
     Edit Group Functionality (Geeneth)     :2024-12-04, 2d
     Group Feed Features (Jihan)            :2024-12-08, 1d
+    Events & Voting System (Tejas)         :2024-12-10, 1d
     
     section Media Features
     Image/Video Upload (Jihan)            :2024-12-06, 2d
