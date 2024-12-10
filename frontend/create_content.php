@@ -17,6 +17,7 @@ $group_id = filter_input(INPUT_GET, 'group_id', FILTER_SANITIZE_NUMBER_INT);
 // Validate form submission
 $errors = [];
 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
     $body = trim(filter_input(INPUT_POST, 'body', FILTER_SANITIZE_STRING));
@@ -57,48 +58,106 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $conn->prepare("INSERT INTO content (Group_ID, Member_ID, Body, Title, Media_Path) VALUES (?, ?, ?, ?, ?)");
             $stmt->bind_param('iisss', $group_id, $member_id, $body, $title, $mediaPath);
 
-            if (!$stmt->execute()) {
-                throw new Exception("Failed to create content: " . $stmt->error);
+
+        // Check if the user is a member of the group
+$stmt = $conn->prepare("SELECT Is_Owner FROM group_members WHERE Member_ID = ? AND Group_ID = ?");
+$stmt->bind_param("ii", $member_id, $group_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $is_owner = $row['Is_Owner'];
+
+    // Retrieve the group owner's ID
+    $stmt = $conn->prepare("SELECT Member_ID FROM group_members WHERE Group_ID = ? AND Is_Owner = 1");
+    $stmt->bind_param("i", $group_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $owner_id = $row['Member_ID'];
+
+        // Retrieve the content submitted by the user
+        // $content = $_POST['content'];
+
+        // If the user is not the owner, send a message to the group owner for approval
+        if (!$is_owner) {
+            $message_title = "$title (Approval: $group_id)";
+            $message_body = "$content";
+
+            $stmt = $conn->prepare("INSERT INTO private_messages (Sender_ID, Receiver_ID, Title, Body) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("iiss", $member_id, $owner_id, $message_title, $message_body);
+
+            if ($stmt->execute()) {
+                echo "Your content has been submitted for approval.";
+            } else {
+                echo "Error: Failed to send the message.";
+                echo $member_id;
+                echo $owner_id . $message_title . $message_body;
             }
-
-            // Get last inserted Content_ID
-            $content_id = $stmt->insert_id;
-
-            //content_classification insertion
-            $classification = isset($_POST['classification']) ? $_POST['classification'] : 'Public'; // Default to 'Public'
-            $view = ($classification === 'Public') ? 'Public' : 'Private';
-            $allow_comment = ($classification === 'Public') ? 1 : 0;
-            $allow_link = ($classification === 'Public') ? 1 : 0;
-            $stmt_classification = $conn->prepare("INSERT INTO content_classification (Content_ID, View, Allow_Comment, Allow_Link) VALUES (?, ?, ?, ?)");
-            $stmt_classification->bind_param('isii', $content_id, $view, $allow_comment, $allow_link);
-
-            if (!$stmt_classification->execute()) {
-                throw new Exception("Failed to create content classification: " . $stmt_classification->error);
+        } else {
+            try {
+                // Disable autocommit
+                $conn->autocommit(FALSE);
+    
+                // Prepare and execute content insertion
+                $stmt = $conn->prepare("INSERT INTO content (Group_ID, Member_ID, Body, Title) VALUES (?, ?, ?, ?)");
+                $stmt->bind_param('iiss', $group_id, $member_id, $body, $title);
+    
+                if (!$stmt->execute()) {
+                    throw new Exception("Failed to create content: " . $stmt->error);
+                }
+    
+                // Get last inserted Content_ID
+                $content_id = $stmt->insert_id;
+    
+                //content_classification insertion
+                $classification = isset($_POST['classification']) ? $_POST['classification'] : 'Public'; // Default to 'Public'
+                $view = ($classification === 'Public') ? 'Public' : 'Private';
+                $allow_comment = ($classification === 'Public') ? 1 : 0;
+                $allow_link = ($classification === 'Public') ? 1 : 0;
+                $stmt_classification = $conn->prepare("INSERT INTO content_classification (Content_ID, View, Allow_Comment, Allow_Link) VALUES (?, ?, ?, ?)");
+                $stmt_classification->bind_param('isii', $content_id, $view, $allow_comment, $allow_link);
+    
+                if (!$stmt_classification->execute()) {
+                    throw new Exception("Failed to create content classification: " . $stmt_classification->error);
+                }
+    
+                // Commit the transaction
+                $conn->commit();
+    
+                // Close statement
+                $stmt->close();
+    
+                // Redirect to the group details page
+                header("Location: group_details.php?id=$group_id");
+                exit();
+    
+            } catch (Exception $e) {
+                // Roll back the transaction
+                $conn->rollback();
+    
+                // Log the error
+                error_log("Content creation error: " . $e->getMessage());
+    
+                // Add error to errors array
+                $errors[] = "An unexpected error occurred. Please try again.";
+            } finally {
+                // Reset autocommit
+                $conn->autocommit(TRUE);
             }
-
-            // Commit the transaction
-            $conn->commit();
-
-            // Close statement
-            $stmt->close();
-
-            // Redirect to the group details page
-            header("Location: group_details.php?id=$group_id");
-            exit();
-
-        } catch (Exception $e) {
-            // Roll back the transaction
-            $conn->rollback();
-
-            // Log the error
-            error_log("Content creation error: " . $e->getMessage());
-
-            // Add error to errors array
-            $errors[] = "An unexpected error occurred. Please try again.";
-        } finally {
-            // Reset autocommit
-            $conn->autocommit(TRUE);
         }
+    } else {
+        echo "Error: Group owner not found.";
+    }
+} else {
+    echo "Error: You are not a member of this group.";
+}
+
+
+        
     }
 }
 ?>
