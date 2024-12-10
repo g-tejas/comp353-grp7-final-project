@@ -168,3 +168,23 @@ CREATE TABLE IF NOT EXISTS `gift_preferences` (
   CONSTRAINT `gift_preferences_Exchange_ID` FOREIGN KEY (`Exchange_ID`) REFERENCES `gift_exchange` (`Exchange_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `gift_preferences_Member_ID` FOREIGN KEY (`Member_ID`) REFERENCES `member` (`Member_ID`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS `event_options` (
+  `Option_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Content_ID` int(11) NOT NULL,
+  `Date_Time` datetime NOT NULL,
+  `Place` varchar(255) NOT NULL,
+  PRIMARY KEY (`Option_ID`),
+  KEY `event_options_Content_ID` (`Content_ID`),
+  CONSTRAINT `event_options_Content_ID` FOREIGN KEY (`Content_ID`) REFERENCES `content` (`Content_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `event_option_votes` (
+  `Member_ID` int(11) NOT NULL,
+  `Option_ID` int(11) NOT NULL,
+  `Timestamp` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`Member_ID`, `Option_ID`),
+  KEY `event_option_votes_Option_ID` (`Option_ID`),
+  CONSTRAINT `event_option_votes_Member_ID` FOREIGN KEY (`Member_ID`) REFERENCES `member` (`Member_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `event_option_votes_Option_ID` FOREIGN KEY (`Option_ID`) REFERENCES `event_options` (`Option_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+);
